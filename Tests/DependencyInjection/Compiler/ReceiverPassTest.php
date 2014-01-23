@@ -13,22 +13,6 @@ class ReceiverPassTest extends \PHPUnit_Framework_TestCase
         $this->container->register('bernard.router', 'Bernard\Symfony\ContainerAwareRouter');
     }
 
-    public function testReceiverTagsAreAddedToRouter()
-    {
-        $this->container->register('test_receiver', 'stdClass')
-            ->addTag('bernard.receiver', array('name' => 'ImportUsers'));
-
-        $pass = new ReceiverPass;
-        $pass->process($this->container);
-
-        $calls = $this->container->getDefinition('bernard.router')->getMethodCalls();
-
-        $this->assertEquals('add', $calls[0][0]);
-        $this->assertCount(2, $calls[0][1]); // two arguments the MessageName and then the reciever
-        $this->assertEquals('ImportUsers', $calls[0][1][0]);
-        $this->assertEquals('test_receiver', $calls[0][1][1]);
-    }
-
     public function testRegisterMultipleTags()
     {
         $this->container->register('test_receiver', 'stdClass')
@@ -39,7 +23,17 @@ class ReceiverPassTest extends \PHPUnit_Framework_TestCase
         $pass = new ReceiverPass;
         $pass->process($this->container);
 
-        $this->assertCount(3, $this->container->getDefinition('bernard.router')->getMethodCalls());
+        $arguments = $this->container->getDefinition('bernard.router')
+            ->getArguments();
+
+        $expected = array(
+            'ImportUsers' => 'test_receiver',
+            'SendNewsletter' => 'test_receiver',
+            'DeleteWorld' => 'test_receiver',
+        );
+
+        $this->assertCount(1, $arguments);
+        $this->assertEquals($expected, $arguments[0]);
     }
 
     public function testExceptionWhenNameAttributeIsMissing()

@@ -8,7 +8,7 @@ class ReceiverPass implements \Symfony\Component\DependencyInjection\Compiler\Co
 {
     public function process(ContainerBuilder $container)
     {
-        $router = $container->getDefinition('bernard.router');
+        $receivers = array();
 
         foreach ($container->findTaggedServiceIds('bernard.receiver') as $id => $tags) {
             foreach ($tags as $attrs) {
@@ -16,8 +16,11 @@ class ReceiverPass implements \Symfony\Component\DependencyInjection\Compiler\Co
                     throw new \RuntimeException(sprintf('Each tag named "bernard.receiver" of service "%s" must have at "name" attribute that species the message name it is associated with.', $id));
                 }
 
-                $router->addMethodCall('add', array($attrs['name'], $id));
+                $receivers[$attrs['name']] = $id;
             }
         }
+
+        $container->getDefinition('bernard.router')
+            ->setArguments(array($receivers));
     }
 }
