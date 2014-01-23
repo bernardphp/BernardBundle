@@ -17,8 +17,9 @@ class BernardBernardBundleTest extends \PHPUnit_Framework_TestCase
 
         $passes = $container->getCompilerPassConfig()->getBeforeOptimizationPasses();
 
-        $this->assertCount(1, $passes);
+        $this->assertCount(2, $passes);
         $this->assertInstanceOf('Bernard\BernardBundle\DependencyInjection\Compiler\ReceiverPass', $passes[0]);
+        $this->assertInstanceOf('Bernard\BernardBundle\DependencyInjection\Compiler\MiddlewarePass', $passes[1]);
     }
 
     public function testCommandsAreRegistered()
