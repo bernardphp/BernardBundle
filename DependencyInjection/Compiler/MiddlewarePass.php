@@ -9,17 +9,25 @@ class MiddlewarePass implements \Symfony\Component\DependencyInjection\Compiler\
 {
     public function process(ContainerBuilder $container)
     {
-        $definitions = array(
-            'consumer' => $container->getDefinition('bernard.middleware_consumer'),
-            'producer' => $container->getDefinition('bernard.middleware_producer'),
+        $factories = array(
+            'consumer' => array(),
+            'producer' => array(),
         );
 
-        foreach ($container->findTaggedServiceIds('bernard.middleware_factory') as $id => $tags) {
-            if (!isset($tags[0]['type']) || !in_array($tags[0]['type'], array('producer', 'consumer'))) {
-                throw new \RuntimeException(sprintf('Each tag named "bernard.producer" of service "%s" must have at "type" attribute of either "consumer" or "producer".', $id));
-            }
+        foreach ($container->findTaggedServiceIds('bernard.middleware') as $id => $tags) {
+            foreach ($tags as $attrs) {
+                if (!isset($attrs['type']) || !in_array($attrs['type'], array('producer', 'consumer'))) {
+                    throw new \RuntimeException(sprintf('Each tag named "bernard.producer" of service "%s" must have at "type" attribute of either "consumer" or "producer".', $id));
+                }
 
-            $definitions[$tags[0]['type']]->addMethodCall('push', array(new Reference($id)));
+                $factories[$attrs['type']][] = new Reference($id);
+            }
         }
+
+        $container->getDefinition('bernard.middleware_consumer')
+            ->setArguments(array($factories['consumer']));
+
+        $container->getDefinition('bernard.middleware_producer')
+            ->setArguments(array($factories['producer']));
     }
 }

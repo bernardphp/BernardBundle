@@ -5,7 +5,7 @@ namespace Bernard\BernardBundle\Tests\DependencyInjection\Compiler;
 use Bernard\BernardBundle\DependencyInjection\Compiler\ReceiverPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ReceiverCompilerPassTest extends \PHPUnit_Framework_TestCase
+class ReceiverPassTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {

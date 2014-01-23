@@ -24,6 +24,7 @@
         </service>
 
         <service id="bernard.middleware_consumer" class="Bernard\Middleware\MiddlewareBuilder" />
+
         <service id="bernard.middleware_producer" class="Bernard\Middleware\MiddlewareBuilder" />
 
         <!-- EventListener -->
