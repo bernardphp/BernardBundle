@@ -39,8 +39,7 @@ bernard_bernard:
 
 Great! You are now ready to use this diddy. Go and read the rest of the documentation on Bernard at bernardphp.com.
 
-Running the Consumer
---------------------
+### Running the Consumer
 
 What good is a message queue if you don't know how to run the consumer? Luckily this bundle auto registeres the commands
 with you application. So if you run `php app/console` you should see `bernar:consume` and `bernard:produce`. Theese
