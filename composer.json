@@ -9,5 +9,9 @@
     "require" : {
         "bernard/bernard" : "~0.11",
         "symfony/framework-bundle" : "~2.1"
+    },
+
+    "require-dev" : {
+        "symfony/console" : "~2.1"
     }
 }
