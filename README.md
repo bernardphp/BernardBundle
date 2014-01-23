@@ -50,7 +50,6 @@ Todo
 
 Currently this Bundle implements what i needed. This means there is proberly something that is missing.
 
- * Missing test for `BernardExtension`.
- * Missing compiler pass for registering middleware for consumer and producer
+ * Missing test for `BernardExtension` and `MiddlewarePass`.
  * Missing some drivers
 
