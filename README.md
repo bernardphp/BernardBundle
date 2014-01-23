@@ -3,6 +3,8 @@ BernardBundle
 
 Integrates Bernard neatly with a Symfony application.
 
+[![Build Status](https://travis-ci.org/bernardphp/BernardBundle.png?branch=master)](https://travis-ci.org/bernardphp/BernardBundle)
+
 Getting Started
 ---------------
 
