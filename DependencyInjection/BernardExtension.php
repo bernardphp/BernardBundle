@@ -17,9 +17,7 @@ class BernardExtension extends \Symfony\Component\HttpKernel\DependencyInjection
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
-        // Theese can be used by the different drivers such as sqs or flat file driver.
-        $container->setParameter('bernard.options.prefetch', $config['prefetch']);
-        $container->setParameter('bernard.options.queue_map', $config['queue_map']);
+        $container->getDefinition('bernard.driver.file')->replaceArgument(0, $config['directory']);
 
         $container->getDefinition('bernard.driver.' . $config['driver'])
             ->setAlias('bernard.driver');

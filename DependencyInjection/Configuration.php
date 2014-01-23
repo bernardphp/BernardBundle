@@ -16,7 +16,8 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
             ->children()
                 ->scalarNode('driver')->isRequired()->end()
                 ->scalarNode('serializer')->defaultValue('simple')->isRequired()->end()
-                ->scalarNode('prefetch')->defaultNull()->isRequired()->end()
+                ->scalarNode('prefetch')->defaultNull()->end()
+                ->scalarNode('directory')->defaultValue('')->end()
                 ->arrayNode('queue_map')->defaultValue(array())->end()
             ->end()
         ;
