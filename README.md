@@ -47,6 +47,10 @@ What good is a message queue if you don't know how to run the consumer? Luckily 
 with you application. So if you run `php app/console` you should see `bernar:consume` and `bernard:produce`. Theese
 works just as the documentation descripes but if you are in doubt just add `--help` when trying to run the command.
 
+It is important to use `--no-debug` when running the consumer for longer periods of time. This is because Symfony by
+default in debug mode collects a lot of information and logging and if this is omitted you will run into memory problems
+sooner or later.
+
 ### Adding Receivers
 
 In order to know what messages needs to go where you have to register some receivers. This is done with a tag in your
