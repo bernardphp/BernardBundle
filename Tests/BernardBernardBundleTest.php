@@ -46,5 +46,8 @@ class BernardBernardBundleTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($application->has('bernard:consume'));
         $this->assertTrue($application->has('bernard:produce'));
+
+        $this->assertTrue($application->has('bernard:debug'));
+        $this->assertInstanceOf('Bernard\BernardBundle\Command\DebugCommand', $application->get('bernard:debug'));
     }
 }
