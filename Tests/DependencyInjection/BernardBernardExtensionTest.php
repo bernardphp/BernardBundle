@@ -25,6 +25,11 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Bernard\Consumer', $this->container->get('bernard.consumer'));
         $this->assertInstanceOf('Bernard\Command\ConsumeCommand', $this->container->get('bernard.consume_command'));
         $this->assertInstanceOf('Bernard\Command\ProduceCommand', $this->container->get('bernard.produce_command'));
+
+        // definitions
+        $this->assertTrue($this->container->hasDefinition('bernard.middleware.failures'));
+        $this->assertTrue($this->container->hasDefinition('bernard.middleware.error_log'));
+        $this->assertTrue($this->container->hasDefinition('bernard.middleware.logger'));
     }
 
     public function testDoctrinEventListenerIsAdded()
