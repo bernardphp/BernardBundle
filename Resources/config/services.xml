@@ -65,14 +65,14 @@
             <argument type="service" id="bernard.dbalconnection" />
         </service>
 
-        <!-- middlewares -->
-        <service id="bernard.middleware.error_log" class="Bernard\Middleware\ErrorLogFactory" />
+        <!-- Middlewares -->
+        <service id="bernard.middleware.error_log" class="Bernard\Middleware\ErrorLogFactory" public="false" />
 
-        <service id="bernard.middleware.logger" class="Bernard\Middleware\Logger">
+        <service id="bernard.middleware.logger" class="Bernard\Middleware\Logger" public="false">
             <argument type="service" id="logger" />
         </service>
 
-        <service id="bernard.middleware.failure" class="Bernard\Middleware\FailuresFactory">
+        <service id="bernard.middleware.failure" class="Bernard\Middleware\FailuresFactory" public="false">
             <argument type="service" id="bernard.queue_factory" />
         </service>
     </services>

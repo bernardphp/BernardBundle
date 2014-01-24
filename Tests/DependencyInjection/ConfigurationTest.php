@@ -15,8 +15,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('simple', $config['serializer']);
 
-        $this->assertEquals(array('error_log' => false, 'logger' => false, 'failure' => false), $config['consumer_middlewares']);
-        $this->assertEquals(array('logger' => false), $config['producer_middlewares']);
+        $this->assertEquals(array('error_log' => false, 'logger' => false, 'failures' => false), $config['middlewares']);
         $this->assertEquals(array('prefetch' => null, 'directory' => '', 'connection' => 'default', 'queue_map' => array()), $config['options']);
     }
 
