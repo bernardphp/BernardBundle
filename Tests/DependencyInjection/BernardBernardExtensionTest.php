@@ -2,7 +2,7 @@
 
 namespace Bernard\BernardBundle\Tests\DependencyInjection;
 
-use Bernard\BernardBundle\DependencyInjection\BernardExtension;
+use Bernard\BernardBundle\DependencyInjection\BernardBernardExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
