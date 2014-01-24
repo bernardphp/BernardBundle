@@ -19,10 +19,7 @@ class BernardExtension extends \Symfony\Component\HttpKernel\DependencyInjection
 
         $container->getDefinition('bernard.driver.file')->replaceArgument(0, $config['directory']);
 
-        $container->getDefinition('bernard.driver.' . $config['driver'])
-            ->setAlias('bernard.driver');
-
-        $container->getDefinition('bernard.serializer.' . $config['driver'])
-            ->setAlias('bernard.serializer');
+        $container->setAlias('bernard.driver', 'bernard.driver.' . $config['driver']);
+        $container->setAlias('bernard.serializer', 'bernard.serializer.' . $config['serializer']);
     }
 }

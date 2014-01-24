@@ -15,10 +15,10 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
         $root
             ->children()
                 ->scalarNode('driver')->isRequired()->end()
-                ->scalarNode('serializer')->defaultValue('simple')->isRequired()->end()
+                ->scalarNode('serializer')->defaultValue('simple')->end()
                 ->scalarNode('prefetch')->defaultNull()->end()
                 ->scalarNode('directory')->defaultValue('')->end()
-                ->arrayNode('queue_map')->defaultValue(array())->end()
+                ->arrayNode('queue_map')->end()
             ->end()
         ;
 

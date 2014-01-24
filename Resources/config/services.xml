@@ -10,7 +10,7 @@
 
         <service id="bernard.consumer" class="Bernard\Consumer">
             <argument type="service" id="bernard.router" />
-            <argument type="servuce" id="bernard.middleware_consumer" />
+            <argument type="service" id="bernard.middleware_consumer" />
         </service>
 
         <service id="bernard.producer" class="Bernard\Producer">
