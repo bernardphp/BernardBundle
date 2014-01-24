@@ -17,10 +17,7 @@ class BernardBernardBundle extends \Symfony\Component\HttpKernel\Bundle\Bundle
 
     public function registerCommands(Application $application)
     {
-        // This is not pretty, but works
-        $container = $application->getKernel()->getContainer();
-
-        $application->add($container->get('bernard.consume_command'));
-        $application->add($container->get('bernard.produce_command'));
+        $application->add($this->container->get('bernard.consume_command'));
+        $application->add($this->container->get('bernard.produce_command'));
     }
 }

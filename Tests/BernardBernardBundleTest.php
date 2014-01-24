@@ -4,7 +4,7 @@ namespace Bernard\BernardBundle\Tests;
 
 use Bernard\BernardBundle\BernardBernardBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
 class BernardBernardBundleTest extends \PHPUnit_Framework_TestCase
@@ -31,12 +31,10 @@ class BernardBernardBundleTest extends \PHPUnit_Framework_TestCase
         $this->container->set('bernard.consume_command', new Command('bernard:consume'));
         $this->container->set('bernard.produce_command', new Command('bernard:produce'));
 
-        $kernel = $this->getMock('Symfony\Component\HttpKernel\KernelInterface');
-        $kernel->expects($this->any())->method('getContainer')->will($this->returnValue($this->container));
-
-        $application = new Application($kernel);
+        $application = new Application();
 
         $bundle = new BernardBernardBundle;
+        $bundle->setContainer($this->container);
         $bundle->registerCommands($application);
 
         $this->assertTrue($application->has('bernard:consume'));
