@@ -1,6 +1,8 @@
 {
     "name" : "bernard/bernard-bundle",
+    "description" : "Integrates Bernard into a Symfony2 application.",
     "type" : "symfony-bundle",
+    "license" : "MIT",
 
     "autoload" : {
         "psr-4" : { "Bernard\\BernardBundle\\" : "" }
@@ -13,5 +15,11 @@
 
     "require-dev" : {
         "symfony/console" : "~2.1"
+    },
+
+    "extra" : {
+        "branch-alias" : {
+            "dev-master" : "1.0.x-dev"
+        }
     }
 }
