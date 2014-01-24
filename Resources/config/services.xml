@@ -72,7 +72,7 @@
             <argument type="service" id="logger" />
         </service>
 
-        <service id="bernard.middleware.failure" class="Bernard\Middleware\FailuresFactory" public="false">
+        <service id="bernard.middleware.failures" class="Bernard\Middleware\FailuresFactory" public="false">
             <argument type="service" id="bernard.queue_factory" />
         </service>
     </services>
