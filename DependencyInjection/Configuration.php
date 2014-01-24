@@ -12,27 +12,18 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
         $tree = new TreeBuilder();
         $root = $tree->root('bernard_bernard');
 
-        $drivers = array('file', 'predis', 'doctrine');
-        $serializers = array('simple', 'jms', 'symfony');
-
         $root
             ->validate()
                 ->ifTrue(function ($v) { return 'file' === $v['driver'] && empty($v['options']['directory']); })
                 ->thenInvalid('The "directory" option must be defined when using the file driver.')
             ->end()
             ->children()
-                ->scalarNode('driver')
-                    ->validate()
-                        ->ifNotInArray($drivers)
-                        ->thenInvalid('The driver %s is not supported. Please choose one of ' . json_encode($drivers))
-                    ->end()
+                ->enumNode('driver')
+                    ->values(array('file', 'prefis', 'doctrine'))
                 ->end()
-                ->scalarNode('serializer')
+                ->enumNode('serializer')
                     ->defaultValue('simple')
-                    ->validate()
-                        ->ifNotInArray($serializers)
-                        ->thenInvalid('The serializer %s is not supported. Please choose of of ' . json_encode($serializers))
-                    ->end()
+                    ->values(array('jms', 'simple', 'symfony'))
                 ->end()
                 ->arrayNode('middlewares')
                     ->addDefaultsIfNotSet()
