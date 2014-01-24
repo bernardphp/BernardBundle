@@ -6,7 +6,7 @@
     <services>
         <service id="bernard.router" class="Bernard\Symfony\ContainerAwareRouter" public="false">
             <argument type="service" id="service_container" />
-            <argument /><!-- Receivers -->
+            <argument type="collection" /><!-- Receivers -->
         </service>
 
         <service id="bernard.consumer" class="Bernard\Consumer">

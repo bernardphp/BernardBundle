@@ -17,7 +17,13 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->extension->load(array(array('driver' => 'doctrine')), $this->container);
 
-        $this->assertTrue($this->container->hasDefinition('bernard.router'));
+        // make sure we dont have a dependencies on a real driver.
+        $this->container->set('bernard.driver', $this->getMock('Bernard\Driver'));
+
+        $this->assertInstanceOf('Bernard\Producer', $this->container->get('bernard.producer'));
+        $this->assertInstanceOf('Bernard\Consumer', $this->container->get('bernard.consumer'));
+        $this->assertInstanceOf('Bernard\Command\ConsumeCommand', $this->container->get('bernard.consume_command'));
+        $this->assertInstanceOf('Bernard\Command\ProduceCommand', $this->container->get('bernard.produce_command'));
     }
 
     public function testInvalidDriver()
