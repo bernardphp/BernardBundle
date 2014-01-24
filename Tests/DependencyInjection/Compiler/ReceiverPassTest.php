@@ -16,9 +16,9 @@ class ReceiverPassTest extends \PHPUnit_Framework_TestCase
     public function testRegisterMultipleTags()
     {
         $this->container->register('test_receiver', 'stdClass')
-            ->addTag('bernard.receiver', array('name' => 'ImportUsers'))
-            ->addTag('bernard.receiver', array('name' => 'SendNewsletter'))
-            ->addTag('bernard.receiver', array('name' => 'DeleteWorld'));
+            ->addTag('bernard.receiver', array('message' => 'ImportUsers'))
+            ->addTag('bernard.receiver', array('message' => 'SendNewsletter'))
+            ->addTag('bernard.receiver', array('message' => 'DeleteWorld'));
 
         $pass = new ReceiverPass;
         $pass->process($this->container);

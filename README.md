@@ -46,3 +46,45 @@ Great! You are now ready to use this diddy. Go and read the rest of the document
 What good is a message queue if you don't know how to run the consumer? Luckily this bundle auto registeres the commands
 with you application. So if you run `php app/console` you should see `bernar:consume` and `bernard:produce`. Theese
 works just as the documentation descripes but if you are in doubt just add `--help` when trying to run the command.
+
+### Adding Receivers
+
+In order to know what messages needs to go where you have to register some receivers. This is done with a tag in your
+service definitions.
+
+``` yaml
+my_receiver:
+    class: Acme\Receiver
+    tags:
+         - { name: bernard.receiver, message: SendNewsletter }
+         - { name: bernard.receiver, message: ImportUsers }
+```
+
+As the example shows it is possible to register the same receiver for many different message types.
+
+### Configuring Middlewares
+
+By default the three core middlewares are registered for the consumer and only needs to be turned on. This example shows
+enabling all of them. But remember theese are only enabled for the consumer.
+
+``` yaml
+bernard_bernard:
+    middlewares:
+        error_log: true
+        logger: true # only for versions of symfony that implements PSR-3
+        failures: true
+```
+
+This is all good, but what if you can coded you own? Luckily this is taken care of with a tag for the container through
+a compiler pass. When you define you service just tag you middleware factory service with `bernard.middleware` and give
+it a `type` attribute or either `consumer` or `producer`.
+
+``` yaml
+my_middleware_factory:
+    class: Acme\AwesomeMiddlewareFactory
+    tags:
+         - { name: bernard.middleware, type: consumer }
+         - { name: bernard.middleware, type: producer }
+```
+
+As the example shows a middleware factory can be registered for both the consumer and producer.

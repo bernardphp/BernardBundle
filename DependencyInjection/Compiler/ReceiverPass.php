@@ -13,11 +13,11 @@ class ReceiverPass implements \Symfony\Component\DependencyInjection\Compiler\Co
 
         foreach ($container->findTaggedServiceIds('bernard.receiver') as $id => $tags) {
             foreach ($tags as $attrs) {
-                if (!isset($attrs['name'])) {
-                    throw new \RuntimeException(sprintf('Each tag named "bernard.receiver" of service "%s" must have at "name" attribute that species the message name it is associated with.', $id));
+                if (!isset($attrs['message'])) {
+                    throw new \RuntimeException(sprintf('Each tag named "bernard.receiver" of service "%s" must have at "message" attribute that species the message name it is associated with.', $id));
                 }
 
-                $receivers[$attrs['name']] = $id;
+                $receivers[$attrs['message']] = $id;
             }
         }
 
