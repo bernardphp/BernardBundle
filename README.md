@@ -46,12 +46,3 @@ Great! You are now ready to use this diddy. Go and read the rest of the document
 What good is a message queue if you don't know how to run the consumer? Luckily this bundle auto registeres the commands
 with you application. So if you run `php app/console` you should see `bernar:consume` and `bernard:produce`. Theese
 works just as the documentation descripes but if you are in doubt just add `--help` when trying to run the command.
-
-Todo
-----
-
-Currently this Bundle implements what i needed. This means there is proberly something that is missing.
-
- * Missing test for `BernardExtension` and `MiddlewarePass`.
- * Missing some drivers
-
