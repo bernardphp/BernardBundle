@@ -25,11 +25,28 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Bernard\Consumer', $this->container->get('bernard.consumer'));
         $this->assertInstanceOf('Bernard\Command\ConsumeCommand', $this->container->get('bernard.consume_command'));
         $this->assertInstanceOf('Bernard\Command\ProduceCommand', $this->container->get('bernard.produce_command'));
+    }
 
-        // definitions
-        $this->assertTrue($this->container->hasDefinition('bernard.middleware.failures'));
-        $this->assertTrue($this->container->hasDefinition('bernard.middleware.error_log'));
-        $this->assertTrue($this->container->hasDefinition('bernard.middleware.logger'));
+    public function testMiddlewaresHaveMiddlewareTag()
+    {
+        $config = array(
+            'driver' => 'doctrine',
+            'middlewares' => array('error_log' => true, 'logger' => true, 'failures' => true),
+        );
+
+        $this->extension->load(array($config), $this->container);
+
+        $definition = $this->container->getDefinition('bernard.middleware.failures');
+        $this->assertTrue($definition->hasTag('bernard.middleware'));
+        $this->assertEquals(array(array('type' => 'consumer')), $definition->getTag('bernard.middleware'));
+
+        $definition = $this->container->getDefinition('bernard.middleware.error_log');
+        $this->assertTrue($definition->hasTag('bernard.middleware'));
+        $this->assertEquals(array(array('type' => 'consumer')), $definition->getTag('bernard.middleware'));
+
+        $definition = $this->container->getDefinition('bernard.middleware.logger');
+        $this->assertTrue($definition->hasTag('bernard.middleware'));
+        $this->assertEquals(array(array('type' => 'consumer')), $definition->getTag('bernard.middleware'));
     }
 
     public function testDoctrinEventListenerIsAdded()
