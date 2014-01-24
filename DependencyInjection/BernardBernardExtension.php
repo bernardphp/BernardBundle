@@ -44,7 +44,7 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
         $container->setAlias('bernard.dbal_connection', 'doctrine.dbal.' . $config['connection'] . '_connection');
     }
 
-    protected function registerMiddlewaresConfiguration($config, $contiainer)
+    protected function registerMiddlewaresConfiguration($config, $container)
     {
         if ($config['failures']) {
             $container->getDefinition('bernard.middleware.failures')

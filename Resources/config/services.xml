@@ -62,7 +62,7 @@
         </service>
 
         <service id="bernard.driver.doctrine" class="Bernard\Driver\DoctrineDriver" public="false">
-            <argument type="service" id="bernard.dbalconnection" />
+            <argument type="service" id="bernard.dbal_connection" />
         </service>
 
         <!-- Middlewares -->
