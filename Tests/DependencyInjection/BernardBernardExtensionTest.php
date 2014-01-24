@@ -5,12 +5,19 @@ namespace Bernard\BernardBundle\Tests\DependencyInjection;
 use Bernard\BernardBundle\DependencyInjection\BernardExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class BernardExtensionTest extends \PHPUnit_Framework_TestCase
+class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->extension = new BernardExtension;
+        $this->extension = new BernardBernardExtension;
         $this->container = new ContainerBuilder;
+    }
+
+    public function testServicesExists()
+    {
+        $this->extension->load(array(array('driver' => 'doctrine')), $this->container);
+
+        $this->assertTrue($this->container->hasDefinition('bernard.router'));
     }
 
     public function testInvalidDriver()

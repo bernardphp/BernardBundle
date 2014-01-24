@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 
-class BernardExtension extends \Symfony\Component\HttpKernel\DependencyInjection\Extension
+class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyInjection\Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {

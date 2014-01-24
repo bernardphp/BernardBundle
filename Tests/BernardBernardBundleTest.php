@@ -14,6 +14,13 @@ class BernardBernardBundleTest extends \PHPUnit_Framework_TestCase
         $this->container = new ContainerBuilder;
     }
 
+    public function testExtension()
+    {
+        $bundle = new BernardBernardBundle();
+
+        $this->assertInstanceOf('Bernard\BernardBundle\DependencyInjection\BernardBernardExtension', $bundle->getContainerExtension());
+    }
+
     public function testCompilerPassIsRegistered()
     {
         $bundle = new BernardBernardBundle();
