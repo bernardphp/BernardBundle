@@ -62,7 +62,18 @@
         </service>
 
         <service id="bernard.driver.doctrine" class="Bernard\Driver\DoctrineDriver" public="false">
-            <argument type="service" id="bernard.dbal_connection" />
+            <argument type="service" id="bernard.dbalconnection" />
+        </service>
+
+        <!-- middlewares -->
+        <service id="bernard.middleware.error_log" class="Bernard\Middleware\ErrorLogFactory" />
+
+        <service id="bernard.middleware.logger" class="Bernard\Middleware\Logger">
+            <argument type="service" id="logger" />
+        </service>
+
+        <service id="bernard.middleware.failure" class="Bernard\Middleware\FailuresFactory">
+            <argument type="service" id="bernard.queue_factory" />
         </service>
     </services>
 </container>

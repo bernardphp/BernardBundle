@@ -17,11 +17,13 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
-        $container->getDefinition('bernard.driver.file')->replaceArgument(0, $config['directory']);
-        $container->getDefinition('bernard.schema_listener')
-            ->addTag('doctrine.event_listener', array('lazy' => true, 'connection' => $config['connection'], 'event' => 'postGenerateSchema'));
+        $options = $config['options'];
 
-        $container->setAlias('bernard.dbal_connection', 'doctrine.dbal.' . $config['connection'] . '_connection');
+        $container->getDefinition('bernard.driver.file')->replaceArgument(0, $options['directory']);
+        $container->getDefinition('bernard.schema_listener')
+            ->addTag('doctrine.event_listener', array('lazy' => true, 'connection' => $options['connection'], 'event' => 'postGenerateSchema'));
+
+        $container->setAlias('bernard.dbal_connection', 'doctrine.dbal.' . $options['connection'] . '_connection');
         $container->setAlias('bernard.driver', 'bernard.driver.' . $config['driver']);
         $container->setAlias('bernard.serializer', 'bernard.serializer.' . $config['serializer']);
     }

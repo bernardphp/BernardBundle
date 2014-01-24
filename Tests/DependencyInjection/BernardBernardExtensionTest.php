@@ -27,64 +27,28 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Bernard\Command\ProduceCommand', $this->container->get('bernard.produce_command'));
     }
 
-    public function testInvalidDriver()
+    public function testDoctrinEventListenerIsAdded()
     {
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
-
-        $this->extension->load(array(array('driver' => 'invalid')), $this->container);
-    }
-
-    public function testInvalidSerializer()
-    {
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
-
-        $this->extension->load(array(array('driver' => 'doctrine', 'serializer' => 'hopefully not valid')), $this->container);
-    }
-
-    public function testFileDriverRequiresDirectoryOptionToBeSet()
-    {
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
-
-        $this->extension->load(array(array('driver' => 'file')), $this->container);
-    }
-
-    /**
-     * @dataProvider eventListenerProvider
-     */
-    public function testDoctrinEventListenerIsAdded($connection)
-    {
-        $config = array_filter(array('driver' => 'doctrine', 'connection' => $connection));
+        $config = array_filter(array('driver' => 'doctrine', 'options' => array('connection' => 'bernard')));
 
         $this->extension->load(array($config), $this->container);
 
         $definition = $this->container->getDefinition('bernard.schema_listener');
-        $connection = $connection ?: 'default';
 
         $expected = array(
             'event' => 'postGenerateSchema',
-            'connection' => $connection,
+            'connection' => 'bernard',
             'lazy' => true,
         );
 
         $this->assertTrue($definition->hasTag('doctrine.event_listener'));
         $this->assertEquals(array($expected), $definition->getTag('doctrine.event_listener'));
-        $this->assertEquals('doctrine.dbal.' . $connection . '_connection', $this->container->getAlias('bernard.dbal_connection'));
-
-        $this->extension->load(array(array('driver' => 'doctrine', 'connection' => 'bernard')), $this->container);
-    }
-
-    public function eventListenerProvider()
-    {
-        return array(
-            array(null),
-            array('default'),
-            array('bernard'),
-        );
+        $this->assertEquals('doctrine.dbal.bernard_connection', $this->container->getAlias('bernard.dbal_connection'));
     }
 
     public function testDirectoryIsAddedToFileDriver()
     {
-        $this->extension->load(array(array('driver' => 'file', 'directory' => __DIR__)), $this->container);
+        $this->extension->load(array(array('driver' => 'file', 'options' => array('directory' => __DIR__))), $this->container);
 
         $definition = $this->container->getDefinition('bernard.driver.file');
 
@@ -92,7 +56,7 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(__DIR__, $definition->getArgument(0));
     }
 
-    public function testDefaultSerializer()
+    public function testSerializerAliases()
     {
         $this->extension->load(array(array('driver' => 'doctrine')), $this->container);
 
@@ -100,13 +64,6 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Alias', $alias);
         $this->assertEquals('bernard.serializer.simple', (string) $alias);
-    }
-
-    public function testDriverIsRequired()
-    {
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
-
-        $this->extension->load(array(), $this->container);
     }
 
     public function testDriverIsAliased()
