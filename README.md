@@ -92,3 +92,42 @@ my_middleware_factory:
 ```
 
 As the example shows a middleware factory can be registered for both the consumer and producer.
+
+Configuration Options
+---------------------
+
+There are different options that can be set that changes the behaviour for various drivers.
+
+### Doctrine
+
+When using the doctrine driver it can be useful to use a seperate connection when using Bernard. In order to
+chage it use the `connection` option. This also needs to be set if you default connection is called anything else
+than `default`.
+
+``` yaml
+doctrine:
+    dbal:
+        connections:
+            bernard:
+                host:     "%database_host%"
+                charset:  UTF8
+
+bernard_bernard:
+    driver: doctrine
+    options:
+        connection: bernard # default is the default value
+```
+
+### FlatFile
+
+The file driver needs to know what directory it should use for storing messages and its queue metadata.
+
+``` yaml
+bernard_bernard:
+    doctrine: file
+    options:
+        directory: %kernel.cache_dir%/bernard
+```
+
+The above example will dump you messages in the cache folder. In most cases you will want to change this to something
+because the cache folder is deleted every time the cache is cleared (obviously).
