@@ -36,6 +36,7 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
                 ->end()
                 ->scalarNode('prefetch')->defaultNull()->end()
                 ->scalarNode('directory')->defaultValue('')->end()
+                ->scalarNode('connection')->defaultValue('default')->end()
                 ->arrayNode('queue_map')->end()
             ->end()
         ;

@@ -47,18 +47,36 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
         $this->extension->load(array(array('driver' => 'file')), $this->container);
     }
 
-    public function testDoctrinEventListenerIsAdded()
+    /**
+     * @dataProvider eventListenerProvider
+     */
+    public function testDoctrinEventListenerIsAdded($connection)
     {
-        $this->extension->load(array(array('driver' => 'doctrine')), $this->container);
+        $config = array_filter(array('driver' => 'doctrine', 'connection' => $connection));
+
+        $this->extension->load(array($config), $this->container);
 
         $definition = $this->container->getDefinition('bernard.schema_listener');
 
-        $this->assertTrue($definition->hasTag('doctrine.event_listener'));
-        $this->assertEquals(array(array(
+        $expected = array(
             'event' => 'postGenerateSchema',
-            'connection' => 'bernard',
+            'connection' => $connection ?: 'default',
             'lazy' => true,
-        )), $definition->getTag('doctrine.event_listener'));
+        );
+
+        $this->assertTrue($definition->hasTag('doctrine.event_listener'));
+        $this->assertEquals(array($expected), $definition->getTag('doctrine.event_listener'));
+
+        $this->extension->load(array(array('driver' => 'doctrine', 'connection' => 'bernard')), $this->container);
+    }
+
+    public function eventListenerProvider()
+    {
+        return array(
+            array(null),
+            array('default'),
+            array('bernard'),
+        );
     }
 
     public function testDirectoryIsAddedToFileDriver()

@@ -9,6 +9,6 @@ class SchemaListener
 {
     public function postGenerateSchema(GenerateSchemaEventArgs $args)
     {
-        MessageSchema::create($args->getSchema());
+        MessagesSchema::create($args->getSchema());
     }
 }

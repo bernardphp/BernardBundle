@@ -29,9 +29,7 @@
         <service id="bernard.middleware_producer" class="Bernard\Middleware\MiddlewareBuilder" public="false" />
 
         <!-- EventListener -->
-        <service id="bernard.schema_listener" class="Bernard\BernardBundle\EventListener\SchemaListener" public="false">
-            <tag name="doctrine.event_listener" event="postGenerateSchema" lazy="true" connection="bernard" />
-        </service>
+        <service id="bernard.schema_listener" class="Bernard\BernardBundle\EventListener\SchemaListener" public="false" />
 
         <!-- commands -->
         <service id="bernard.consume_command" class="Bernard\Command\ConsumeCommand">
