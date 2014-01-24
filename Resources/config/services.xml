@@ -4,8 +4,9 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="bernard.router" class="Bernard\Symfony\ContainerAwareRouter">
+        <service id="bernard.router" class="Bernard\Symfony\ContainerAwareRouter" public="false">
             <argument type="service" id="service_container" />
+            <argument /><!-- Receivers -->
         </service>
 
         <service id="bernard.consumer" class="Bernard\Consumer">
@@ -18,17 +19,17 @@
             <argument type="service" id="bernard.middleware_producer" />
         </service>
 
-        <service id="bernard.queue_factory" class="Bernard\QueueFactory\PersistentFactory">
+        <service id="bernard.queue_factory" class="Bernard\QueueFactory\PersistentFactory" public="false">
             <argument type="service" id="bernard.driver" />
             <argument type="service" id="bernard.serializer" />
         </service>
 
-        <service id="bernard.middleware_consumer" class="Bernard\Middleware\MiddlewareBuilder" />
+        <service id="bernard.middleware_consumer" class="Bernard\Middleware\MiddlewareBuilder" public="false" />
 
-        <service id="bernard.middleware_producer" class="Bernard\Middleware\MiddlewareBuilder" />
+        <service id="bernard.middleware_producer" class="Bernard\Middleware\MiddlewareBuilder" public="false" />
 
         <!-- EventListener -->
-        <service id="bernard.schema_listener" class="Bernard\BernardBundle\EventListener\SchemaListener">
+        <service id="bernard.schema_listener" class="Bernard\BernardBundle\EventListener\SchemaListener" public="false">
             <tag name="doctrine.event_listener" event="postGenerateSchema" lazy="true" connection="bernard" />
         </service>
 
@@ -43,26 +44,26 @@
         </service>
 
         <!-- Serializers -->
-        <service id="bernard.serializer.simple" class="Bernard\Serializer\SimpleSerializer" />
+        <service id="bernard.serializer.simple" class="Bernard\Serializer\SimpleSerializer" public="false" />
 
-        <service id="bernard.serializer.symfony" class="Bernard\Serializer\SymfonySerializer">
+        <service id="bernard.serializer.symfony" class="Bernard\Serializer\SymfonySerializer" public="false">
             <argument type="service" id="serializer" />
         </service>
 
-        <service id="bernard.serializer.jms" class="Bernard\Serializer\JmsSerializer">
+        <service id="bernard.serializer.jms" class="Bernard\Serializer\JmsSerializer" public="false">
             <argument type="service" id="jms_serializer" />
         </service>
 
         <!-- Drivers -->
-        <service id="bernard.driver.predis" class="Bernard\Driver\PredisDriver">
+        <service id="bernard.driver.predis" class="Bernard\Driver\PredisDriver" public="false">
             <argument type="service" id="snc_redis.bernard" />
         </service>
 
-        <service id="bernard.driver.file" class="Bernard\Driver\FlatFileDriver">
+        <service id="bernard.driver.file" class="Bernard\Driver\FlatFileDriver" public="false">
             <argument /><!-- base directory -->
         </service>
 
-        <service id="bernard.driver.doctrine" class="Bernard\Driver\DoctrineDriver">
+        <service id="bernard.driver.doctrine" class="Bernard\Driver\DoctrineDriver" public="false">
             <argument type="service" id="doctrine.dbal.bernard_connection" />
         </service>
     </services>

@@ -32,8 +32,10 @@ class ReceiverPassTest extends \PHPUnit_Framework_TestCase
             'DeleteWorld' => 'test_receiver',
         );
 
-        $this->assertCount(1, $arguments);
-        $this->assertEquals($expected, $arguments[0]);
+        $this->assertCount(2, $arguments);
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $arguments[0]);
+        $this->assertEquals('service_container', (string) $arguments[0]);
+        $this->assertEquals($expected, $arguments[1]);
     }
 
     public function testExceptionWhenNameAttributeIsMissing()

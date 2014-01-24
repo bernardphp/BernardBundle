@@ -3,6 +3,7 @@
 namespace Bernard\BernardBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 class ReceiverPass implements \Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
@@ -21,6 +22,6 @@ class ReceiverPass implements \Symfony\Component\DependencyInjection\Compiler\Co
         }
 
         $container->getDefinition('bernard.router')
-            ->setArguments(array($receivers));
+            ->setArguments(array(new Reference('service_container'), $receivers));
     }
 }
