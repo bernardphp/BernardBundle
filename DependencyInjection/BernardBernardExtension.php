@@ -21,6 +21,7 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
         $container->getDefinition('bernard.schema_listener')
             ->addTag('doctrine.event_listener', array('lazy' => true, 'connection' => $config['connection'], 'event' => 'postGenerateSchema'));
 
+        $container->setAlias('bernard.dbal_connection', 'doctrine.dbal.' . $config['connection'] . '_connection');
         $container->setAlias('bernard.driver', 'bernard.driver.' . $config['driver']);
         $container->setAlias('bernard.serializer', 'bernard.serializer.' . $config['serializer']);
     }

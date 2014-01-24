@@ -20,6 +20,7 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
         // make sure we dont have a dependencies on a real driver.
         $this->container->set('bernard.driver', $this->getMock('Bernard\Driver'));
 
+        // Real services
         $this->assertInstanceOf('Bernard\Producer', $this->container->get('bernard.producer'));
         $this->assertInstanceOf('Bernard\Consumer', $this->container->get('bernard.consumer'));
         $this->assertInstanceOf('Bernard\Command\ConsumeCommand', $this->container->get('bernard.consume_command'));
@@ -57,15 +58,17 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
         $this->extension->load(array($config), $this->container);
 
         $definition = $this->container->getDefinition('bernard.schema_listener');
+        $connection = $connection ?: 'default';
 
         $expected = array(
             'event' => 'postGenerateSchema',
-            'connection' => $connection ?: 'default',
+            'connection' => $connection,
             'lazy' => true,
         );
 
         $this->assertTrue($definition->hasTag('doctrine.event_listener'));
         $this->assertEquals(array($expected), $definition->getTag('doctrine.event_listener'));
+        $this->assertEquals('doctrine.dbal.' . $connection . '_connection', $this->container->getAlias('bernard.dbal_connection'));
 
         $this->extension->load(array(array('driver' => 'doctrine', 'connection' => 'bernard')), $this->container);
     }
