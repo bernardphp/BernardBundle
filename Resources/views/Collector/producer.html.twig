@@ -23,7 +23,7 @@
 
 {% block panel %}
     {% if not collector.count %}
-        No messages produced.
+        Nothing to report!
     {% endif %}
 
     {% for queue, messages in collector.all %}
