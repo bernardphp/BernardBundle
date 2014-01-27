@@ -9,7 +9,7 @@
     },
 
     "require" : {
-        "bernard/bernard" : ">=0.11,<=1.0",
+        "bernard/bernard" : ">=0.11,<1.0",
         "symfony/framework-bundle" : "~2.1"
     },
 
