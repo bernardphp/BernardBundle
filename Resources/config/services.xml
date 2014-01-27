@@ -75,5 +75,10 @@
         <service id="bernard.middleware.failures" class="Bernard\Middleware\FailuresFactory" public="false">
             <argument type="service" id="bernard.queue_factory" />
         </service>
+
+        <!-- Profiler -->
+        <service id="bernard.data_collector.producer_data_collector" class="Bernard\BernardBundle\DataCollector\ProducerDataCollector" public="false">
+            <tag name="data_collector" template="BernardBernardBundle:Collector:producer.html.twig" id="bernard" />
+        </service>
     </services>
 </container>
