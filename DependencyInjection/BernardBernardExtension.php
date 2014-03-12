@@ -4,6 +4,7 @@ namespace Bernard\BernardBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -28,6 +29,10 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
             $this->registerFlatFileConfiguration($config['options'], $container);
         }
 
+        if ($config['serializer'] == 'jms') {
+            $this->registerJmsConfiguration($container);
+        }
+
         $this->registerMiddlewaresConfiguration($config['middlewares'], $container);
     }
 
@@ -42,6 +47,13 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
             ->addTag('doctrine.event_listener', array('lazy' => true, 'connection' => $config['connection'], 'event' => 'postGenerateSchema'));
 
         $container->setAlias('bernard.dbal_connection', 'doctrine.dbal.' . $config['connection'] . '_connection');
+    }
+
+    protected function registerJmsConfiguration($container)
+    {
+        $definition = new Definition('Bernard\JMSSerializer\EnvelopeHandler');
+        $definition->addTag('jms_serializer.subscribing_handler');
+        $container->setDefinition('bernard.jms_serializer.envelope_handler', $definition);
     }
 
     protected function registerMiddlewaresConfiguration($config, $container)
