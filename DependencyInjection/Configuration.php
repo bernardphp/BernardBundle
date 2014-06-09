@@ -39,6 +39,7 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
                         ->scalarNode('prefetch')->defaultNull()->end()
                         ->scalarNode('directory')->defaultValue('')->end()
                         ->scalarNode('connection')->defaultValue('default')->end()
+                        ->scalarNode('phpredis_service')->defaultValue('snc_redis.bernard')->end()
                         ->arrayNode('queue_map')->prototype('array')->end()
                     ->end()
                 ->end()
