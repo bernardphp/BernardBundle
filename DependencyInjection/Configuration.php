@@ -19,7 +19,7 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
             ->end()
             ->children()
                 ->enumNode('driver')
-                    ->values(array('file', 'prefis', 'doctrine'))
+                    ->values(array('file', 'predis', 'doctrine'))
                 ->end()
                 ->enumNode('serializer')
                     ->defaultValue('simple')
