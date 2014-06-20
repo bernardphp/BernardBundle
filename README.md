@@ -124,7 +124,7 @@ The file driver needs to know what directory it should use for storing messages 
 
 ``` yaml
 bernard_bernard:
-    doctrine: file
+    driver: file
     options:
         directory: %kernel.cache_dir%/bernard
 ```
