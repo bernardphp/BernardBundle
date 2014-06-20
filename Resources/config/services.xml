@@ -57,6 +57,10 @@
             <argument type="service" id="snc_redis.bernard" />
         </service>
 
+        <service id="bernard.driver.phpredis" class="Bernard\Driver\PhpRedisDriver" public="false">
+            <argument type="service" id="snc_redis.bernard" />
+        </service>
+
         <service id="bernard.driver.file" class="Bernard\Driver\FlatFileDriver" public="false">
             <argument /><!-- base directory -->
         </service>

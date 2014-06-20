@@ -29,6 +29,10 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
             $this->registerFlatFileConfiguration($config['options'], $container);
         }
 
+        if ($config['driver'] == 'phpredis' && isset($config['options']['phpredis_service']) && $config['options']['phpredis_service']) {
+            $this->registerPhpRedisConfiguration($config['options'], $container);
+        }
+
         if ($config['serializer'] == 'jms') {
             $this->registerJmsConfiguration($container);
         }
@@ -72,5 +76,10 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
             $container->getDefinition('bernard.middleware.logger')
                 ->addTag('bernard.middleware', array('type' => 'consumer'));
         }
+    }
+
+    protected function registerPhpRedisConfiguration($config, $container)
+    {
+        $container->getDefinition('bernard.driver.phpredis')->replaceArgument(0, new Reference($config['phpredis_service']));
     }
 }
