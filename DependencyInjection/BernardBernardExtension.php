@@ -33,6 +33,10 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
             $this->registerPhpRedisConfiguration($config['options'], $container);
         }
 
+        if ($config['driver'] == 'ironmq') {
+            $this->registerIronMQConfiguration($config['options'], $container);
+        }
+
         if ($config['serializer'] == 'jms') {
             $this->registerJmsConfiguration($container);
         }
@@ -51,6 +55,11 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
             ->addTag('doctrine.event_listener', array('lazy' => true, 'connection' => $config['connection'], 'event' => 'postGenerateSchema'));
 
         $container->setAlias('bernard.dbal_connection', 'doctrine.dbal.' . $config['connection'] . '_connection');
+    }
+
+    protected function registerIronMQConfiguration($config, $container)
+    {
+        $container->getDefinition('bernard.driver.ironmq')->replaceArgument(0, new Reference($config['ironmq_service']));
     }
 
     protected function registerJmsConfiguration($container)
