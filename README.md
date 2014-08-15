@@ -146,3 +146,21 @@ bernard_bernard:
 
 If you're using the [SncRedisBundle](https://github.com/snc/SncRedisBundle) you have to set logging to false for the
 bernhard client to ensure that is is a ``Redis`` instance and not wrapped.
+
+### IronMQ
+
+When using the IronMQ driver you have to configure an `IronMQ` connection instance. You can configure it like the following:
+
+``` yaml
+services:
+    ironmq_connection:
+        class: IronMQ
+        arguments:
+            - { token: %ironmq_token%, project_id: %ironmq_project_id% }
+        public: false
+
+bernard_bernard:
+    driver: ironmq
+    options:
+        ironmq_service: ironmq_connection
+```
