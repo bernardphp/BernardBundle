@@ -15,7 +15,8 @@
 
     "require-dev" : {
         "symfony/console" : "~2.1",
-        "symfony/finder" : "~2.1"
+        "symfony/finder" : "~2.1",
+	"phpunit/phpunit": "~4.0"
     },
 
     "extra" : {
