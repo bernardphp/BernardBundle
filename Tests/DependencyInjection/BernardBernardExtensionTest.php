@@ -49,7 +49,7 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(array('type' => 'consumer')), $definition->getTag('bernard.middleware'));
     }
 
-    public function testDoctrinEventListenerIsAdded()
+    public function testDoctrineEventListenerIsAdded()
     {
         $config = array_filter(array('driver' => 'doctrine', 'options' => array('connection' => 'bernard')));
 
