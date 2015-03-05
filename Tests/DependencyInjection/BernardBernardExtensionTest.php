@@ -4,9 +4,20 @@ namespace Bernard\BernardBundle\Tests\DependencyInjection;
 
 use Bernard\BernardBundle\DependencyInjection\BernardBernardExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var BernardBernardExtension
+     */
+    protected $extension;
+
+    /**
+     * @var ContainerBuilder
+     */
+    protected $container;
+
     public function setUp()
     {
         $this->extension = new BernardBernardExtension;
@@ -96,5 +107,46 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Alias', $alias);
         $this->assertEquals('bernard.driver.doctrine', (string) $alias);
+    }
+
+    public function testSqsDriverCanBeBuildFromConfiguration()
+    {
+        $configuredQueueMap = array('name1' => 'url1', 'name2' => 'url2');
+        $configuredPrefetch = 5;
+        $configuredRegion = 'test-region';
+        $configuredKey = 'test-key';
+        $configuredSecret = 'test-secret';
+
+        $config = array(
+            'driver' => 'sqs',
+            'options' => array(
+                'queue_map' => $configuredQueueMap,
+                'prefetch' => $configuredPrefetch,
+            ),
+            'sqs' => array(
+                'region' => $configuredRegion,
+                'key' => $configuredKey,
+                'secret' => $configuredSecret,
+            ),
+        );
+
+        $this->extension->load(array($config), $this->container);
+        $driverDefinition = $this->container->getDefinition('bernard.driver.sqs');
+
+        /** @var Definition $resultingSqsClientArgument */
+        $resultingSqsClientArgument = $driverDefinition->getArgument(0);
+        $this->assertSame('Aws\Sqs\SqsClient', $resultingSqsClientArgument->getFactoryClass());
+        $this->assertSame('factory', $resultingSqsClientArgument->getFactoryMethod());
+
+        $sqsClientFactoryArguments = $resultingSqsClientArgument->getArguments();
+        $this->assertSame($configuredRegion, $sqsClientFactoryArguments['region']);
+        $this->assertSame($configuredKey, $sqsClientFactoryArguments['key']);
+        $this->assertSame($configuredSecret, $sqsClientFactoryArguments['secret']);
+
+        $resultingQueueMapArgument = $driverDefinition->getArgument(1);
+        $this->assertEquals($configuredQueueMap, $resultingQueueMapArgument);
+
+        $resultingPrefetchArgument = $driverDefinition->getArgument(2);
+        $this->assertEquals($configuredPrefetch, $resultingPrefetchArgument);
     }
 }

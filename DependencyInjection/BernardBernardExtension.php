@@ -4,6 +4,7 @@ namespace Bernard\BernardBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -28,12 +29,34 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
             $this->registerFlatFileConfiguration($config['options'], $container);
         }
 
+        if ($config['driver'] == 'sqs') {
+            $this->registerSqsConfiguration($config, $container);
+        }
+
         $this->registerMiddlewaresConfiguration($config['middlewares'], $container);
     }
 
     protected function registerFlatFileConfiguration($config, $container)
     {
         $container->getDefinition('bernard.driver.file')->replaceArgument(0, $config['directory']);
+    }
+
+    protected function registerSqsConfiguration(array $config, ContainerBuilder $container)
+    {
+        $sqsClientDefinition = new Definition();
+        $sqsClientDefinition->setFactoryClass('Aws\Sqs\SqsClient')
+                            ->setFactoryMethod('factory')
+                            ->setArguments(
+                                array(
+                                    'region' => $config['sqs']['region'],
+                                    'key' => $config['sqs']['key'],
+                                    'secret' => $config['sqs']['secret'],
+                                )
+                            );
+        $container->getDefinition('bernard.driver.sqs')->replaceArgument(0, $sqsClientDefinition);
+
+        $container->getDefinition('bernard.driver.sqs')->replaceArgument(1, $config['options']['queue_map']);
+        $container->getDefinition('bernard.driver.sqs')->replaceArgument(2, $config['options']['prefetch']);
     }
 
     protected function registerDoctrineConfiguration($config, $container)
