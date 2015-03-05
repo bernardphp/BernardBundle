@@ -35,7 +35,7 @@ public function registerBundles()
 ``` yml
 # .. previous content of app/config/config.yml
 bernard_bernard:
-    driver: file # you can choose redis, predis, pheanstalk, file, doctrine etc.
+    driver: file # you can choose redis, predis, pheanstalk, file, doctrine, sqs etc.
     serializer: simple # this is the default and it is optional. Other values are symfony or jms
 ```
 
