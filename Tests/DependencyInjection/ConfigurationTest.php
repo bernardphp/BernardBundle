@@ -96,6 +96,12 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'driver' => 'sqs',
+            'options' => array(
+                'queue_map' => array(
+                    'name1' => 'url1',
+                    'name2' => 'url2',
+                )
+            ),
             'sqs' => array(
                 'region' => 'test-region',
                 'key' => 'test-key',
