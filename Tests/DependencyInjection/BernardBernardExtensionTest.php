@@ -139,9 +139,10 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('factory', $resultingSqsClientArgument->getFactoryMethod());
 
         $sqsClientFactoryArguments = $resultingSqsClientArgument->getArguments();
-        $this->assertSame($configuredRegion, $sqsClientFactoryArguments['region']);
-        $this->assertSame($configuredKey, $sqsClientFactoryArguments['key']);
-        $this->assertSame($configuredSecret, $sqsClientFactoryArguments['secret']);
+        $sqsClientFactoryConfiguration = $sqsClientFactoryArguments[0];
+        $this->assertSame($configuredRegion, $sqsClientFactoryConfiguration['region']);
+        $this->assertSame($configuredKey, $sqsClientFactoryConfiguration['key']);
+        $this->assertSame($configuredSecret, $sqsClientFactoryConfiguration['secret']);
 
         $resultingQueueMapArgument = $driverDefinition->getArgument(1);
         $this->assertEquals($configuredQueueMap, $resultingQueueMapArgument);

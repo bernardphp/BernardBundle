@@ -48,9 +48,11 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
                             ->setFactoryMethod('factory')
                             ->setArguments(
                                 array(
-                                    'region' => $config['sqs']['region'],
-                                    'key' => $config['sqs']['key'],
-                                    'secret' => $config['sqs']['secret'],
+                                    array(
+                                        'region' => $config['sqs']['region'],
+                                        'key' => $config['sqs']['key'],
+                                        'secret' => $config['sqs']['secret'],
+                                    )
                                 )
                             );
         $container->getDefinition('bernard.driver.sqs')->replaceArgument(0, $sqsClientDefinition);
