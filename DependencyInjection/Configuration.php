@@ -3,6 +3,7 @@
 namespace Bernard\BernardBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class Configuration implements \Symfony\Component\Config\Definition\ConfigurationInterface
@@ -13,13 +14,9 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
         $root = $tree->root('bernard_bernard');
 
         $root
-            ->validate()
-                ->ifTrue(function ($v) { return 'file' === $v['driver'] && empty($v['options']['directory']); })
-                ->thenInvalid('The "directory" option must be defined when using the file driver.')
-            ->end()
             ->children()
                 ->enumNode('driver')
-                    ->values(array('file', 'prefis', 'doctrine'))
+                    ->values(array('file', 'prefis', 'doctrine', 'sqs'))
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
@@ -35,6 +32,14 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
                         ->booleanNode('failures')->defaultFalse()->end()
                     ->end()
                 ->end()
+                ->arrayNode('sqs')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('region')->defaultNull()->end()
+                        ->scalarNode('key')->defaultNull()->end()
+                        ->scalarNode('secret')->defaultNull()->end()
+                    ->end()
+                ->end()
                 ->arrayNode('options')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -47,6 +52,29 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
             ->end()
         ;
 
+        $this->addValidationRules($root);
+
         return $tree;
+    }
+
+    protected function addValidationRules(NodeDefinition $root)
+    {
+        $root
+            ->validate()
+                ->ifTrue(function ($v) { return 'file' === $v['driver'] && empty($v['options']['directory']); })
+                ->thenInvalid('The "directory" option must be defined when using the file driver.')
+            ->end()
+            ->validate()
+                ->ifTrue(function ($v) { return 'sqs' === $v['driver'] && empty($v['sqs']['region']); })
+                ->thenInvalid('The "region" option must be defined when using the sqs driver.')
+            ->end()
+            ->validate()
+                ->ifTrue(function ($v) { return 'sqs' === $v['driver'] && empty($v['sqs']['key']); })
+                ->thenInvalid('The "key" option must be defined when using the sqs driver.')
+            ->end()
+            ->validate()
+                ->ifTrue(function ($v) { return 'sqs' === $v['driver'] && empty($v['sqs']['secret']); })
+                ->thenInvalid('The "secret" option must be defined when using the sqs driver.')
+            ->end();
     }
 }
