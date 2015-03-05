@@ -14,6 +14,14 @@ class Configuration implements ConfigurationInterface
         $tree = new TreeBuilder();
         $root = $tree->root('bernard_bernard');
 
+        $this->addNodes($root);
+        $this->addValidationRules($root);
+
+        return $tree;
+    }
+
+    protected function addNodes(NodeDefinition $root)
+    {
         $root
             ->children()
                 ->enumNode('driver')
@@ -52,10 +60,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
-
-        $this->addValidationRules($root);
-
-        return $tree;
     }
 
     protected function addValidationRules(NodeDefinition $root)
