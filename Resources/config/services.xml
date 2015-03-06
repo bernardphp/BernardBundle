@@ -48,7 +48,7 @@
             <argument type="service" id="serializer" />
         </service>
 
-        <service id="bernard.serializer.jms" class="Bernard\Serializer\JmsSerializer" public="false">
+        <service id="bernard.serializer.jms" class="Bernard\Serializer\JMSSerializer" public="false">
             <argument type="service" id="jms_serializer" />
         </service>
 
