@@ -25,7 +25,13 @@
             <argument type="service" id="bernard.serializer" />
         </service>
 
-        <service id="bernard.serializer" class="Bernard\Serializer" public="false" />
+        <service id="bernard.normalizer" class="Normalt\Normalizer\AggregateNormalizer" public="false">
+            <argument type="collection" />
+        </service>
+
+        <service id="bernard.serializer" class="Bernard\Serializer" public="false">
+            <argument type="service" id="bernard.normalizer" />
+        </service>
 
         <!-- Commands -->
 
@@ -52,6 +58,16 @@
         <service id="bernard.listener.error_log" class="Bernard\EventListener\ErrorLogSubscriber" public="false" />
 
         <service id="bernard.listener.doctrine_schema" class="Bernard\BernardBundle\EventListener\SchemaListener" public="false" />
+
+        <!-- Normalizers -->
+
+        <service id="bernard.normalizer.envelope" class="Bernard\Normalizer\EnvelopeNormalizer">
+            <tag name="bernard.normalizer" />
+        </service>
+
+        <service id="bernard.normalizer.default_message" class="Bernard\Normalizer\DefaultMessageNormalizer">
+            <tag name="bernard.normalizer" />
+        </service>
 
         <!-- Drivers -->
 
