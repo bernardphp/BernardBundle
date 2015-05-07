@@ -9,48 +9,71 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $config = $this->processConfig(array(
-            'driver' => 'doctrine',
-        ));
+        $config = $this->processConfig(['driver' => 'doctrine']);
 
-        $this->assertEquals('simple', $config['serializer']);
+        $this->assertEquals([
+            'error_log' => false,
+            'logger' => [
+                'enabled' => false,
+                'service' => 'logger',
+            ],
+            'failure' => [
+                'enabled' => false,
+                'queue_name' => 'failed',
+            ],
+        ], $config['listeners']);
 
-        $this->assertEquals(array('error_log' => false, 'logger' => false, 'failures' => false), $config['middlewares']);
-        $this->assertEquals(array('prefetch' => null, 'directory' => '', 'connection' => 'default', 'phpredis_service' => 'snc_redis.bernard', 'ironmq_service' => null, 'queue_map' => array()), $config['options']);
+        $this->assertEquals([
+            'connection'       => 'default',
+            'directory'        => null,
+            'phpredis_service' => 'snc_redis.bernard',
+            'predis_service'   => 'snc_redis.bernard',
+            'ironmq_service'   => null,
+        ], $config['options']);
     }
 
-    public function testDriverIsRequired()
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The child node "driver" at path "bernard" must be configured.
+     */
+    public function testEmpty()
     {
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
-
-        $this->processConfig(array());
+        $this->processConfig([]);
     }
 
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
     public function testInvalidDriver()
     {
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
-
-        $this->processConfig(array('driver' => 'non_existent'));
+        $this->processConfig(['driver' => 'non_existent']);
     }
 
-    public function testInvalidSerializer()
-    {
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
-
-        $this->processConfig(array('driver' => 'non_existent'));
-    }
-
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "directory" option must be defined when using the "file" driver.
+     */
     public function testFileDriverRequiresDirectoryOptionToBeSet()
     {
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
-
-        $this->processConfig(array('driver' => 'file'));
+        $this->processConfig(['driver' => 'file']);
     }
 
-    protected function processConfig($config)
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "ironmq_service" option must be defined when using the "ironmq" driver.
+     */
+    public function testIronMqDriverRequiresServiceOptionToBeSet()
     {
-        $processor = new Processor();
+        $this->processConfig(['driver' => 'ironmq']);
+    }
 
-        return $processor->processConfiguration(new Configuration(), array($config));
+    /**
+     * @param array $config
+     *
+     * @return array
+     */
+    private function processConfig(array $config)
+    {
+        return (new Processor())->processConfiguration(new Configuration(), [$config]);
     }
 }
