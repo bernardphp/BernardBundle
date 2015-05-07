@@ -40,6 +40,17 @@
 
         <!-- Listeners -->
 
+        <service id="bernard.listener.failure" class="Bernard\EventListener\FailureSubscriber" public="false">
+            <argument type="service" id="bernard.queue_factory" />
+            <argument /><!-- Queue name -->
+        </service>
+
+        <service id="bernard.listener.logger" class="Bernard\EventListener\LoggerSubscriber" public="false">
+            <argument /><!-- Logger -->
+        </service>
+
+        <service id="bernard.listener.error_log" class="Bernard\EventListener\ErrorLogSubscriber" public="false" />
+
         <service id="bernard.listener.doctrine_schema" class="Bernard\BernardBundle\EventListener\SchemaListener" public="false" />
 
         <!-- Drivers -->
@@ -53,15 +64,15 @@
         </service>
 
         <service id="bernard.driver.phpredis" class="Bernard\Driver\PhpRedisDriver" public="false">
-            <argument /><!-- Redis instance -->
+            <argument /><!-- Redis -->
         </service>
 
         <service id="bernard.driver.predis" class="Bernard\Driver\PredisDriver" public="false">
-            <argument /><!-- Predis client instance -->
+            <argument /><!-- Predis client -->
         </service>
 
         <service id="bernard.driver.ironmq" class="Bernard\Driver\IronMqDriver" public="false">
-            <argument /><!-- IronMQ connection instance -->
+            <argument /><!-- IronMQ connection -->
         </service>
 
     </services>

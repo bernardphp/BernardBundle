@@ -38,6 +38,8 @@ class BernardExtension extends ConfigurableExtension
                 $this->registerIronMQConfiguration($config['options'], $container);
                 break;
         }
+
+        $this->registerListeners($config['listeners'], $container);
     }
 
     private function registerDoctrineConfiguration($config, ContainerBuilder $container)
@@ -53,23 +55,42 @@ class BernardExtension extends ConfigurableExtension
         );
     }
 
-    private function registerFlatFileConfiguration($config, ContainerBuilder $container)
+    private function registerFlatFileConfiguration(array $config, ContainerBuilder $container)
     {
         $container->getDefinition('bernard.driver.file')->replaceArgument(0, $config['directory']);
     }
 
-    private function registerPhpRedisConfiguration($config, ContainerBuilder $container)
+    private function registerPhpRedisConfiguration(array $config, ContainerBuilder $container)
     {
         $container->getDefinition('bernard.driver.phpredis')->replaceArgument(0, new Reference($config['phpredis_service']));
     }
 
-    private function registerPredisConfiguration($config, ContainerBuilder $container)
+    private function registerPredisConfiguration(array $config, ContainerBuilder $container)
     {
         $container->getDefinition('bernard.driver.predis')->replaceArgument(0, new Reference($config['predis_service']));
     }
 
-    private function registerIronMQConfiguration($config, ContainerBuilder $container)
+    private function registerIronMQConfiguration(array $config, ContainerBuilder $container)
     {
         $container->getDefinition('bernard.driver.ironmq')->replaceArgument(0, new Reference($config['ironmq_service']));
+    }
+
+    private function registerListeners(array $config, ContainerBuilder $container)
+    {
+        foreach ($config as $id => $params) {
+            if (empty($params) || !$params['enabled']) { // Listener is disabled.
+                continue;
+            }
+
+            // Enable listener.
+            $listener = $container->getDefinition('bernard.listener.'.$id);
+            $listener->addTag('kernel.event_subscriber');
+
+            if ($id === 'logger') {
+                $listener->replaceArgument(0, new Reference($params['service']));
+            } elseif ($id === 'failure') {
+                $listener->replaceArgument(1, $params['queue_name']);
+            }
+        }
     }
 }
