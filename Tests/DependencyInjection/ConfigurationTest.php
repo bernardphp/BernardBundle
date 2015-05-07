@@ -49,8 +49,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     protected function processConfig($config)
     {
-        $processor = new Processor;
+        $processor = new Processor();
 
-        return $processor->processConfiguration(new Configuration, array($config));
+        return $processor->processConfiguration(new Configuration(), array($config));
     }
 }

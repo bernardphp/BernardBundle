@@ -2,14 +2,14 @@
 
 namespace Bernard\BernardBundle\DependencyInjection\Compiler;
 
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
-class ReceiverPass implements \Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class ReceiverPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $receivers = array();
+        $receivers = [];
 
         foreach ($container->findTaggedServiceIds('bernard.receiver') as $id => $tags) {
             foreach ($tags as $attrs) {
@@ -21,7 +21,6 @@ class ReceiverPass implements \Symfony\Component\DependencyInjection\Compiler\Co
             }
         }
 
-        $container->getDefinition('bernard.router')
-            ->setArguments(array(new Reference('service_container'), $receivers));
+        $container->getDefinition('bernard.router')->replaceArgument(1, $receivers);
     }
 }

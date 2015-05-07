@@ -9,7 +9,7 @@ class ReceiverPassTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->container = new ContainerBuilder;
+        $this->container = new ContainerBuilder();
         $this->container->register('bernard.router', 'Bernard\Symfony\ContainerAwareRouter');
     }
 
@@ -20,7 +20,7 @@ class ReceiverPassTest extends \PHPUnit_Framework_TestCase
             ->addTag('bernard.receiver', array('message' => 'SendNewsletter'))
             ->addTag('bernard.receiver', array('message' => 'DeleteWorld'));
 
-        $pass = new ReceiverPass;
+        $pass = new ReceiverPass();
         $pass->process($this->container);
 
         $arguments = $this->container->getDefinition('bernard.router')
@@ -45,7 +45,7 @@ class ReceiverPassTest extends \PHPUnit_Framework_TestCase
         $this->container->register('test_receiver', 'stdClass')
             ->addTag('bernard.receiver', array());
 
-        $pass = new ReceiverPass;
+        $pass = new ReceiverPass();
         $pass->process($this->container);
     }
 }

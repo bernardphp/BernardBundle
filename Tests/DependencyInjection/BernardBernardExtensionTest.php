@@ -9,8 +9,8 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->extension = new BernardBernardExtension;
-        $this->container = new ContainerBuilder;
+        $this->extension = new BernardBernardExtension();
+        $this->container = new ContainerBuilder();
     }
 
     public function testServicesExists()

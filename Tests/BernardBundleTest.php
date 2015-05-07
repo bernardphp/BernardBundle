@@ -2,45 +2,47 @@
 
 namespace Bernard\BernardBundle\Tests;
 
-use Bernard\BernardBundle\BernardBernardBundle;
+use Bernard\BernardBundle\BernardBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
-class BernardBernardBundleTest extends \PHPUnit_Framework_TestCase
+class BernardBundleTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var ContainerBuilder */
+    private $container;
+
     public function setUp()
     {
-        $this->container = new ContainerBuilder;
+        $this->container = new ContainerBuilder();
     }
 
     public function testExtension()
     {
-        $bundle = new BernardBernardBundle();
+        $bundle = new BernardBundle();
 
-        $this->assertInstanceOf('Bernard\BernardBundle\DependencyInjection\BernardBernardExtension', $bundle->getContainerExtension());
+        $this->assertInstanceOf('Bernard\BernardBundle\DependencyInjection\BernardExtension', $bundle->getContainerExtension());
     }
 
     public function testCompilerPassIsRegistered()
     {
-        $bundle = new BernardBernardBundle();
+        $bundle = new BernardBundle();
         $bundle->build($this->container);
 
         $passes = $this->container->getCompilerPassConfig()->getBeforeOptimizationPasses();
 
-        $this->assertCount(2, $passes);
+        $this->assertCount(1, $passes);
         $this->assertInstanceOf('Bernard\BernardBundle\DependencyInjection\Compiler\ReceiverPass', $passes[0]);
-        $this->assertInstanceOf('Bernard\BernardBundle\DependencyInjection\Compiler\MiddlewarePass', $passes[1]);
     }
 
     public function testCommandsAreRegistered()
     {
-        $this->container->set('bernard.consume_command', new Command('bernard:consume'));
-        $this->container->set('bernard.produce_command', new Command('bernard:produce'));
+        $this->container->set('bernard.command.consume', new Command('bernard:consume'));
+        $this->container->set('bernard.command.produce', new Command('bernard:produce'));
 
         $application = new Application();
 
-        $bundle = new BernardBernardBundle;
+        $bundle = new BernardBundle();
         $bundle->setContainer($this->container);
         $bundle->registerCommands($application);
 
