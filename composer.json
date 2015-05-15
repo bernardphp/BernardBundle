@@ -1,26 +1,32 @@
 {
-    "name" : "bernard/bernard-bundle",
+    "name"        : "bernard/bernard-bundle",
     "description" : "Integrates Bernard into a Symfony2 application.",
-    "type" : "symfony-bundle",
-    "license" : "MIT",
+    "type"        : "symfony-bundle",
+    "homepage"    : "http://bernardphp.com",
+    "license"     : "MIT",
 
     "autoload" : {
         "psr-4" : { "Bernard\\BernardBundle\\" : "" }
     },
 
     "require" : {
-        "bernard/bernard" : ">=0.11,<0.13",
-        "symfony/framework-bundle" : "~2.1"
+        "bernard/bernard"          : "1.0.*@dev",
+        "symfony/framework-bundle" : "~2.3"
     },
 
     "require-dev" : {
-        "symfony/console" : "~2.1",
-        "symfony/finder" : "~2.1"
+        "symfony/console" : "~2.3",
+        "symfony/finder"  : "~2.3",
+        "phpunit/phpunit" : "~4.0"
     },
 
     "extra" : {
         "branch-alias" : {
-            "dev-master" : "1.0.x-dev"
+            "dev-master" : "2.0.x-dev"
         }
+    },
+
+    "config" : {
+        "bin-dir" : "bin"
     }
 }

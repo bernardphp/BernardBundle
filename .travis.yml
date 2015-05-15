@@ -1,21 +1,26 @@
 language: php
 
 php:
-    - 5.3
     - 5.4
     - 5.5
+    - 5.6
+    - 7.0
+    - hhvm
 
 env:
-    - SYMFONY_VERSION=2.1.*
-    - SYMFONY_VERSION=2.2.*
     - SYMFONY_VERSION=2.3.*
     - SYMFONY_VERSION=2.4.*
+    - SYMFONY_VERSION=2.5.*
+    - SYMFONY_VERSION=2.6.*
 
-before_script:
-    - "composer self-update"
-    - "composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update"
-    - "composer require --dev symfony/console:${SYMFONY_VERSION} --no-update"
-    - "composer require --dev symfony/finder:${SYMFONY_VERSION} --no-update"
-    - "composer install --dev --no-progress --no-custom-installers --no-scripts"
+before_install:
+    - composer self-update
 
-script: phpunit
+install:
+    - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
+    - composer require symfony/console:${SYMFONY_VERSION} --no-update
+    - composer require symfony/finder:${SYMFONY_VERSION} --no-update
+    - composer install --no-progress --no-plugins
+
+script:
+    - bin/phpunit

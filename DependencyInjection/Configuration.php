@@ -2,51 +2,92 @@
 
 namespace Bernard\BernardBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class Configuration implements \Symfony\Component\Config\Definition\ConfigurationInterface
+class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
         $tree = new TreeBuilder();
-        $root = $tree->root('bernard_bernard');
+        $root = $tree->root('bernard');
 
         $root
-            ->validate()
-                ->ifTrue(function ($v) { return 'file' === $v['driver'] && empty($v['options']['directory']); })
-                ->thenInvalid('The "directory" option must be defined when using the file driver.')
-            ->end()
             ->children()
                 ->enumNode('driver')
-                    ->values(array('file', 'predis', 'doctrine', 'phpredis', 'ironmq'))
+                    ->isRequired()
+                    ->values(['doctrine', 'file', 'phpredis', 'predis', 'ironmq'])
                 ->end()
-                ->enumNode('serializer')
-                    ->defaultValue('simple')
-                    ->values(array('jms', 'simple', 'symfony'))
-                ->end()
-                ->arrayNode('middlewares')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->booleanNode('error_log')->defaultFalse()->end()
-                        ->booleanNode('logger')->defaultFalse()->end()
-                        ->booleanNode('failures')->defaultFalse()->end()
-                    ->end()
-                ->end()
+
                 ->arrayNode('options')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('prefetch')->defaultNull()->end()
-                        ->scalarNode('directory')->defaultValue('')->end()
                         ->scalarNode('connection')->defaultValue('default')->end()
+                        ->scalarNode('directory')->defaultNull()->end()
                         ->scalarNode('phpredis_service')->defaultValue('snc_redis.bernard')->end()
+                        ->scalarNode('predis_service')->defaultValue('snc_redis.bernard')->end()
                         ->scalarNode('ironmq_service')->defaultNull()->end()
-                        ->arrayNode('queue_map')->prototype('array')->end()
+                    ->end()
+                ->end()
+
+                ->arrayNode('listeners')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('error_log')->defaultFalse()->end()
+                        ->arrayNode('logger')
+                            ->canBeEnabled()
+                            ->children()
+                                ->scalarNode('service')->defaultValue('logger')->end()
+                            ->end()
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($v) { return ['enabled' => true, 'service' => $v]; })
+                            ->end()
+                        ->end()
+                        ->arrayNode('failure')
+                            ->canBeEnabled()
+                            ->children()
+                                ->scalarNode('queue_name')->defaultValue('failed')->end()
+                            ->end()
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($v) { return ['enabled' => true, 'queue_name' => $v]; })
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end()
         ;
 
+        $this
+            ->validateDriver($root, 'file', 'directory')
+            ->validateDriver($root, 'phpredis', 'phpredis_service')
+            ->validateDriver($root, 'predis', 'predis_service')
+            ->validateDriver($root, 'ironmq', 'ironmq_service')
+        ;
+
         return $tree;
+    }
+
+    /**
+     * @param NodeDefinition $node
+     * @param string         $driver
+     * @param string         $option
+     *
+     * @return self
+     */
+    private function validateDriver(NodeDefinition $node, $driver, $option)
+    {
+        $node
+            ->validate()
+                ->ifTrue(function ($v) use ($driver, $option) {
+                    return $driver === $v['driver'] && empty($v['options'][$option]);
+                })
+                ->thenInvalid(sprintf('The "%s" option must be defined when using the "%s" driver.', $option, $driver))
+            ->end()
+        ;
+
+        return $this;
     }
 }
