@@ -35,17 +35,17 @@ public function registerBundles()
 ``` yml
 # .. previous content of app/config/config.yml
 bernard_bernard:
-    driver: file # you can choose redis, predis, pheanstalk, file, doctrine, sqs etc.
+    driver: file # you can choose predis, phpredis, file, doctrine, sqs etc.
     serializer: simple # this is the default and it is optional. Other values are symfony or jms
 ```
 
-Great! You are now ready to use this diddy. Go and read the rest of the documentation on Bernard at bernardphp.com.
+Great! You are now ready to use this diddy. Go and read the rest of the documentation on Bernard at [bernardphp.com](http://bernardphp.com/).
 
 ### Running the Consumer
 
-What good is a message queue if you don't know how to run the consumer? Luckily this bundle auto registeres the commands
-with you application. So if you run `php app/console` you should see `bernar:consume` and `bernard:produce`. Theese
-works just as the documentation descripes but if you are in doubt just add `--help` when trying to run the command.
+What good is a message queue if you don't know how to run the consumer? Luckily this bundle auto registers the commands
+with your application. So if you run `php app/console` you should see `bernard:consume` and `bernard:produce`. These
+work just as the documentation describes but if you are in doubt just add `--help` when running the command.
 
 It is important to use `--no-debug` when running the consumer for longer periods of time. This is because Symfony by
 default in debug mode collects a lot of information and logging and if this is omitted you will run into memory problems
@@ -79,9 +79,9 @@ bernard_bernard:
         failures: true
 ```
 
-This is all good, but what if you can coded you own? Luckily this is taken care of with a tag for the container through
-a compiler pass. When you define you service just tag you middleware factory service with `bernard.middleware` and give
-it a `type` attribute or either `consumer` or `producer`.
+This is all good, but what if you can code your own? Luckily this is taken care of with a tag for the container through
+a compiler pass. When you define your service just tag your middleware factory service with `bernard.middleware` and give
+it a `type` attribute with either `consumer` or `producer`.
 
 ``` yaml
 my_middleware_factory:
@@ -101,7 +101,7 @@ There are different options that can be set that changes the behaviour for vario
 ### Doctrine
 
 When using the doctrine driver it can be useful to use a seperate connection when using Bernard. In order to
-chage it use the `connection` option. This also needs to be set if you default connection is called anything else
+change it use the `connection` option. This also needs to be set if you default connection is called anything else
 than `default`.
 
 ``` yaml
@@ -124,13 +124,46 @@ The file driver needs to know what directory it should use for storing messages 
 
 ``` yaml
 bernard_bernard:
-    doctrine: file
+    driver: file
     options:
         directory: %kernel.cache_dir%/bernard
 ```
 
-The above example will dump you messages in the cache folder. In most cases you will want to change this to something
+The above example will dump your messages in the cache folder. In most cases you will want to change this to something
 because the cache folder is deleted every time the cache is cleared (obviously).
+
+### PhpRedis
+
+PhpRedis depends on a service called `snc_redis.bernard` with a configured `Redis` instance. If you want to use a
+different name use the `phpredis_service` option:
+
+``` yaml
+bernard_bernard:
+    driver: phpredis
+    options:
+        phpredis_service: my_redis_service
+```
+
+If you're using the [SncRedisBundle](https://github.com/snc/SncRedisBundle) you have to set logging to false for the
+bernhard client to ensure that is is a ``Redis`` instance and not wrapped.
+
+### IronMQ
+
+When using the IronMQ driver you have to configure an `IronMQ` connection instance. You can configure it like the following:
+
+``` yaml
+services:
+    ironmq_connection:
+        class: IronMQ
+        arguments:
+            - { token: %ironmq_token%, project_id: %ironmq_project_id% }
+        public: false
+
+bernard_bernard:
+    driver: ironmq
+    options:
+        ironmq_service: ironmq_connection
+```
 
 ### Amazon SQS
 
@@ -148,4 +181,3 @@ bernard_bernard:
         key: "your aws user's key"
         secret: "your aws user's secret"
 ```
-

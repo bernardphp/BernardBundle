@@ -14,8 +14,8 @@ env:
 before_script:
     - "composer self-update"
     - "composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update"
-    - "composer require symfony/console:${SYMFONY_VERSION} --no-update"
-    - "composer require symfony/finder:${SYMFONY_VERSION} --no-update"
+    - "composer require --dev symfony/console:${SYMFONY_VERSION} --no-update"
+    - "composer require --dev symfony/finder:${SYMFONY_VERSION} --no-update"
     - "composer install --dev --no-progress --no-custom-installers --no-scripts"
 
 script: phpunit

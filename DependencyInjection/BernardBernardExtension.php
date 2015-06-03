@@ -29,6 +29,18 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
             $this->registerFlatFileConfiguration($config['options'], $container);
         }
 
+        if ($config['driver'] == 'phpredis' && isset($config['options']['phpredis_service']) && $config['options']['phpredis_service']) {
+            $this->registerPhpRedisConfiguration($config['options'], $container);
+        }
+
+        if ($config['driver'] == 'ironmq') {
+            $this->registerIronMQConfiguration($config['options'], $container);
+        }
+
+        if ($config['serializer'] == 'jms') {
+            $this->registerJmsConfiguration($container);
+        }
+
         if ($config['driver'] == 'sqs') {
             $this->registerSqsConfiguration($config, $container);
         }
@@ -69,6 +81,18 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
         $container->setAlias('bernard.dbal_connection', 'doctrine.dbal.' . $config['connection'] . '_connection');
     }
 
+    protected function registerIronMQConfiguration($config, $container)
+    {
+        $container->getDefinition('bernard.driver.ironmq')->replaceArgument(0, new Reference($config['ironmq_service']));
+    }
+
+    protected function registerJmsConfiguration($container)
+    {
+        $definition = new Definition('Bernard\JMSSerializer\EnvelopeHandler');
+        $definition->addTag('jms_serializer.subscribing_handler');
+        $container->setDefinition('bernard.jms_serializer.envelope_handler', $definition);
+    }
+
     protected function registerMiddlewaresConfiguration($config, $container)
     {
         if ($config['failures']) {
@@ -85,5 +109,10 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
             $container->getDefinition('bernard.middleware.logger')
                 ->addTag('bernard.middleware', array('type' => 'consumer'));
         }
+    }
+
+    protected function registerPhpRedisConfiguration($config, $container)
+    {
+        $container->getDefinition('bernard.driver.phpredis')->replaceArgument(0, new Reference($config['phpredis_service']));
     }
 }

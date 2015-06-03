@@ -25,7 +25,7 @@ class Configuration implements ConfigurationInterface
         $root
             ->children()
                 ->enumNode('driver')
-                    ->values(array('file', 'prefis', 'doctrine', 'sqs'))
+                    ->values(array('file', 'predis', 'doctrine', 'phpredis', 'ironmq', 'sqs'))
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
@@ -55,6 +55,8 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('prefetch')->defaultNull()->end()
                         ->scalarNode('directory')->defaultValue('')->end()
                         ->scalarNode('connection')->defaultValue('default')->end()
+                        ->scalarNode('phpredis_service')->defaultValue('snc_redis.bernard')->end()
+                        ->scalarNode('ironmq_service')->defaultNull()->end()
                         ->arrayNode('queue_map')
                             ->useAttributeAsKey('name')
                             ->prototype('scalar')->end()

@@ -16,7 +16,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('simple', $config['serializer']);
 
         $this->assertEquals(array('error_log' => false, 'logger' => false, 'failures' => false), $config['middlewares']);
-        $this->assertEquals(array('prefetch' => null, 'directory' => '', 'connection' => 'default', 'queue_map' => array()), $config['options']);
+        $this->assertEquals(array('prefetch' => null, 'directory' => '', 'connection' => 'default', 'phpredis_service' => 'snc_redis.bernard', 'ironmq_service' => null, 'queue_map' => array()), $config['options']);
         $this->assertEquals(array('region' => null, 'key' => null, 'secret' => null), $config['sqs']);
     }
 
