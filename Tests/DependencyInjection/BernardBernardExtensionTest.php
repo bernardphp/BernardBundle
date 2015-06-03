@@ -135,8 +135,7 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
 
         /** @var Definition $resultingSqsClientArgument */
         $resultingSqsClientArgument = $driverDefinition->getArgument(0);
-        $this->assertSame('Aws\Sqs\SqsClient', $resultingSqsClientArgument->getFactoryClass());
-        $this->assertSame('factory', $resultingSqsClientArgument->getFactoryMethod());
+        $this->assertSame(array('Aws\Sqs\SqsClient', 'factory'), $resultingSqsClientArgument->getFactory());
 
         $sqsClientFactoryArguments = $resultingSqsClientArgument->getArguments();
         $sqsClientFactoryConfiguration = $sqsClientFactoryArguments[0];

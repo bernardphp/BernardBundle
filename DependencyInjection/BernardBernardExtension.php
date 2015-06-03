@@ -56,8 +56,8 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
     protected function registerSqsConfiguration(array $config, ContainerBuilder $container)
     {
         $sqsClientDefinition = new Definition();
-        $sqsClientDefinition->setFactoryClass('Aws\Sqs\SqsClient')
-                            ->setFactoryMethod('factory')
+        $sqsClientDefinition->setClass('Aws\Sqs\SqsClient')
+                            ->setFactory('Aws\Sqs\SqsClient::factory')
                             ->setArguments(
                                 array(
                                     array(
