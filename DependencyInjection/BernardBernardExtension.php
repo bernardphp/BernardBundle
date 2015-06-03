@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\Kernel;
 
 class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyInjection\Extension
 {
@@ -55,9 +56,13 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
     protected function registerSqsConfiguration(array $config, ContainerBuilder $container)
     {
         $sqsClientDefinition = new Definition();
-        $sqsClientDefinition->setClass('Aws\Sqs\SqsClient')
-                            ->setFactory('Aws\Sqs\SqsClient::factory')
-                            ->setArguments(
+        if (Kernel::MAJOR_VERSION == 2 && Kernel::MINOR_VERSION < 6) {
+            $sqsClientDefinition->setFactoryClass('Aws\Sqs\SqsClient')
+                                ->setFactoryMethod('factory');
+        } else {
+            $sqsClientDefinition->setFactory('Aws\Sqs\SqsClient::factory');
+        }
+        $sqsClientDefinition->setArguments(
                                 array(
                                     array(
                                         'region' => $config['sqs']['region'],

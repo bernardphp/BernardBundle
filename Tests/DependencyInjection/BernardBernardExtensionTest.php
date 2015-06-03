@@ -5,6 +5,7 @@ namespace Bernard\BernardBundle\Tests\DependencyInjection;
 use Bernard\BernardBundle\DependencyInjection\BernardBernardExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\HttpKernel\Kernel;
 
 class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -135,7 +136,12 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
 
         /** @var Definition $resultingSqsClientArgument */
         $resultingSqsClientArgument = $driverDefinition->getArgument(0);
-        $this->assertSame(array('Aws\Sqs\SqsClient', 'factory'), $resultingSqsClientArgument->getFactory());
+        if (Kernel::MAJOR_VERSION == 2 && Kernel::MINOR_VERSION < 6) {
+            $this->assertSame('Aws\Sqs\SqsClient', $resultingSqsClientArgument->getFactoryClass());
+            $this->assertSame('factory', $resultingSqsClientArgument->getFactoryMethod());
+        } else {
+            $this->assertSame(array('Aws\Sqs\SqsClient', 'factory'), $resultingSqsClientArgument->getFactory());
+        }
 
         $sqsClientFactoryArguments = $resultingSqsClientArgument->getArguments();
         $sqsClientFactoryConfiguration = $sqsClientFactoryArguments[0];
