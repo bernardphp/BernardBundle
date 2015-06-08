@@ -136,11 +136,11 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
 
         /** @var Definition $resultingSqsClientArgument */
         $resultingSqsClientArgument = $driverDefinition->getArgument(0);
-        if (Kernel::MAJOR_VERSION == 2 && Kernel::MINOR_VERSION < 6) {
+        if ($this->definitionClassDeprecatesSetFactoryClassAndSetFactoryMethod()) {
+            $this->assertSame(array('Aws\Sqs\SqsClient', 'factory'), $resultingSqsClientArgument->getFactory());
+        } else {
             $this->assertSame('Aws\Sqs\SqsClient', $resultingSqsClientArgument->getFactoryClass());
             $this->assertSame('factory', $resultingSqsClientArgument->getFactoryMethod());
-        } else {
-            $this->assertSame(array('Aws\Sqs\SqsClient', 'factory'), $resultingSqsClientArgument->getFactory());
         }
 
         $sqsClientFactoryArguments = $resultingSqsClientArgument->getArguments();
@@ -154,5 +154,13 @@ class BernardBernardExtensionTest extends \PHPUnit_Framework_TestCase
 
         $resultingPrefetchArgument = $driverDefinition->getArgument(2);
         $this->assertEquals($configuredPrefetch, $resultingPrefetchArgument);
+    }
+
+    /**
+     * @return bool
+     */
+    private function definitionClassDeprecatesSetFactoryClassAndSetFactoryMethod()
+    {
+        return method_exists(new Definition(), 'setFactory');
     }
 }

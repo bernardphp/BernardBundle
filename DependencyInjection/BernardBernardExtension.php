@@ -56,11 +56,11 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
     protected function registerSqsConfiguration(array $config, ContainerBuilder $container)
     {
         $sqsClientDefinition = new Definition();
-        if (Kernel::MAJOR_VERSION == 2 && Kernel::MINOR_VERSION < 6) {
+        if ($this->definitionClassDeprecatesSetFactoryClassAndSetFactoryMethod()) {
+            $sqsClientDefinition->setFactory('Aws\Sqs\SqsClient::factory');
+        } else {
             $sqsClientDefinition->setFactoryClass('Aws\Sqs\SqsClient')
                                 ->setFactoryMethod('factory');
-        } else {
-            $sqsClientDefinition->setFactory('Aws\Sqs\SqsClient::factory');
         }
         $sqsClientDefinition->setArguments(
                                 array(
@@ -118,5 +118,13 @@ class BernardBernardExtension extends \Symfony\Component\HttpKernel\DependencyIn
     protected function registerPhpRedisConfiguration($config, $container)
     {
         $container->getDefinition('bernard.driver.phpredis')->replaceArgument(0, new Reference($config['phpredis_service']));
+    }
+
+    /**
+     * @return bool
+     */
+    private function definitionClassDeprecatesSetFactoryClassAndSetFactoryMethod()
+    {
+        return method_exists(new Definition(), 'setFactory');
     }
 }
