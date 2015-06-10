@@ -35,7 +35,7 @@ public function registerBundles()
 ``` yml
 # .. previous content of app/config/config.yml
 bernard_bernard:
-    driver: file # you can choose predis, phpredis, file, doctrine etc.
+    driver: file # you can choose predis, phpredis, file, doctrine, sqs etc.
     serializer: simple # this is the default and it is optional. Other values are symfony or jms
 ```
 
@@ -163,4 +163,21 @@ bernard_bernard:
     driver: ironmq
     options:
         ironmq_service: ironmq_connection
+```
+
+### Amazon SQS
+
+To use Amazon SQS, configure your driver like this:
+
+``` yaml
+bernard_bernard:
+    driver: sqs
+    options:
+        queue_map: # optional for aliasing queue urls, e.g.:
+            send_newsletter: https://sqs.eu-west-1.amazonaws.com/...
+        prefetch: 1 # optional, but beware the default is >1 and you may run into invisibility timeout problems with that 
+    sqs:
+        region: "your aws region" # e.g. "eu-west-1"
+        key: "your aws user's key"
+        secret: "your aws user's secret"
 ```

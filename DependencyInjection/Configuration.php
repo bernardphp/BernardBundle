@@ -3,23 +3,31 @@
 namespace Bernard\BernardBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class Configuration implements \Symfony\Component\Config\Definition\ConfigurationInterface
+class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
         $tree = new TreeBuilder();
         $root = $tree->root('bernard_bernard');
 
+        $this->addNodes($root);
+        $this->addValidationRules($root);
+
+        return $tree;
+    }
+
+    protected function addNodes(NodeDefinition $root)
+    {
         $root
-            ->validate()
-                ->ifTrue(function ($v) { return 'file' === $v['driver'] && empty($v['options']['directory']); })
-                ->thenInvalid('The "directory" option must be defined when using the file driver.')
-            ->end()
             ->children()
                 ->enumNode('driver')
-                    ->values(array('file', 'predis', 'doctrine', 'phpredis', 'ironmq'))
+                    ->values(array('file', 'predis', 'doctrine', 'phpredis', 'ironmq', 'sqs'))
+                    ->isRequired()
+                    ->cannotBeEmpty()
                 ->end()
                 ->enumNode('serializer')
                     ->defaultValue('simple')
@@ -33,6 +41,14 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
                         ->booleanNode('failures')->defaultFalse()->end()
                     ->end()
                 ->end()
+                ->arrayNode('sqs')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('region')->defaultNull()->end()
+                        ->scalarNode('key')->defaultNull()->end()
+                        ->scalarNode('secret')->defaultNull()->end()
+                    ->end()
+                ->end()
                 ->arrayNode('options')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -41,12 +57,34 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
                         ->scalarNode('connection')->defaultValue('default')->end()
                         ->scalarNode('phpredis_service')->defaultValue('snc_redis.bernard')->end()
                         ->scalarNode('ironmq_service')->defaultNull()->end()
-                        ->arrayNode('queue_map')->prototype('array')->end()
+                        ->arrayNode('queue_map')
+                            ->useAttributeAsKey('name')
+                            ->prototype('scalar')->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end()
         ;
+    }
 
-        return $tree;
+    protected function addValidationRules(NodeDefinition $root)
+    {
+        $root
+            ->validate()
+                ->ifTrue(function ($v) { return 'file' === $v['driver'] && empty($v['options']['directory']); })
+                ->thenInvalid('The "directory" option must be defined when using the file driver.')
+            ->end()
+            ->validate()
+                ->ifTrue(function ($v) { return 'sqs' === $v['driver'] && empty($v['sqs']['region']); })
+                ->thenInvalid('The "region" option must be defined when using the sqs driver.')
+            ->end()
+            ->validate()
+                ->ifTrue(function ($v) { return 'sqs' === $v['driver'] && empty($v['sqs']['key']); })
+                ->thenInvalid('The "key" option must be defined when using the sqs driver.')
+            ->end()
+            ->validate()
+                ->ifTrue(function ($v) { return 'sqs' === $v['driver'] && empty($v['sqs']['secret']); })
+                ->thenInvalid('The "secret" option must be defined when using the sqs driver.')
+            ->end();
     }
 }

@@ -73,6 +73,12 @@
             <argument /><!-- IronMQ connection instance -->
         </service>
 
+        <service id="bernard.driver.sqs" class="Bernard\Driver\SqsDriver" public="false">
+            <argument /><!-- SQS client-->
+            <argument /><!-- queue map -->
+            <argument /><!-- prefetch -->
+        </service>
+
         <!-- Middlewares -->
         <service id="bernard.middleware.error_log" class="Bernard\Middleware\ErrorLogFactory" public="false" />
 
