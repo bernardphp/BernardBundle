@@ -34,7 +34,7 @@ public function registerBundles()
 
 ``` yml
 # .. previous content of app/config/config.yml
-bernard_bernard:
+bernard:
     driver: file # you can choose predis, phpredis, file, doctrine, sqs etc.
     serializer: simple # this is the default and it is optional. Other values are symfony or jms
 ```
@@ -72,7 +72,7 @@ By default the three core middlewares are registered for the consumer and only n
 enabling all of them. But remember theese are only enabled for the consumer.
 
 ``` yaml
-bernard_bernard:
+bernard:
     middlewares:
         error_log: true
         logger: true # only for versions of symfony that implements PSR-3
@@ -112,7 +112,7 @@ doctrine:
                 host:     "%database_host%"
                 charset:  UTF8
 
-bernard_bernard:
+bernard:
     driver: doctrine
     options:
         connection: bernard # default is the default value
@@ -123,7 +123,7 @@ bernard_bernard:
 The file driver needs to know what directory it should use for storing messages and its queue metadata.
 
 ``` yaml
-bernard_bernard:
+bernard:
     driver: file
     options:
         directory: %kernel.cache_dir%/bernard
@@ -138,7 +138,7 @@ PhpRedis depends on a service called `snc_redis.bernard` with a configured `Redi
 different name use the `phpredis_service` option:
 
 ``` yaml
-bernard_bernard:
+bernard:
     driver: phpredis
     options:
         phpredis_service: my_redis_service
@@ -159,7 +159,7 @@ services:
             - { token: %ironmq_token%, project_id: %ironmq_project_id% }
         public: false
 
-bernard_bernard:
+bernard:
     driver: ironmq
     options:
         ironmq_service: ironmq_connection
