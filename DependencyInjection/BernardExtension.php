@@ -37,6 +37,10 @@ class BernardExtension extends ConfigurableExtension
             case 'ironmq':
                 $this->registerIronMQConfiguration($config['options'], $container);
                 break;
+
+            case 'sqs':
+                $this->registerSqsConfiguration($config['options'], $container);
+                break;
         }
 
         $this->registerListeners($config['listeners'], $container);
@@ -73,6 +77,13 @@ class BernardExtension extends ConfigurableExtension
     private function registerIronMQConfiguration(array $config, ContainerBuilder $container)
     {
         $container->getDefinition('bernard.driver.ironmq')->replaceArgument(0, new Reference($config['ironmq_service']));
+    }
+
+    private function registerSqsConfiguration(array $config, ContainerBuilder $container)
+    {
+        $container->getDefinition('bernard.driver.sqs')->replaceArgument(0, new Reference($config['sqs_service']))
+                                                       ->replaceArgument(1, $config['sqs_queue_map'])
+                                                       ->replaceArgument(2, $config['prefetch']);
     }
 
     private function registerListeners(array $config, ContainerBuilder $container)

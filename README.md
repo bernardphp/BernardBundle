@@ -34,9 +34,8 @@ public function registerBundles()
 
 ``` yml
 # .. previous content of app/config/config.yml
-bernard_bernard:
-    driver: file # you can choose predis, phpredis, file, doctrine etc.
-    serializer: simple # this is the default and it is optional. Other values are symfony or jms
+bernard:
+    driver: file # you can choose predis, phpredis, file, doctrine, sqs etc.
 ```
 
 Great! You are now ready to use this diddy. Go and read the rest of the documentation on Bernard at [bernardphp.com](http://bernardphp.com/).
@@ -66,33 +65,6 @@ my_receiver:
 
 As the example shows it is possible to register the same receiver for many different message types.
 
-### Configuring Middlewares
-
-By default the three core middlewares are registered for the consumer and only needs to be turned on. This example shows
-enabling all of them. But remember theese are only enabled for the consumer.
-
-``` yaml
-bernard_bernard:
-    middlewares:
-        error_log: true
-        logger: true # only for versions of symfony that implements PSR-3
-        failures: true
-```
-
-This is all good, but what if you can code your own? Luckily this is taken care of with a tag for the container through
-a compiler pass. When you define your service just tag your middleware factory service with `bernard.middleware` and give
-it a `type` attribute with either `consumer` or `producer`.
-
-``` yaml
-my_middleware_factory:
-    class: Acme\AwesomeMiddlewareFactory
-    tags:
-         - { name: bernard.middleware, type: consumer }
-         - { name: bernard.middleware, type: producer }
-```
-
-As the example shows a middleware factory can be registered for both the consumer and producer.
-
 Configuration Options
 ---------------------
 
@@ -112,7 +84,7 @@ doctrine:
                 host:     "%database_host%"
                 charset:  UTF8
 
-bernard_bernard:
+bernard:
     driver: doctrine
     options:
         connection: bernard # default is the default value
@@ -123,7 +95,7 @@ bernard_bernard:
 The file driver needs to know what directory it should use for storing messages and its queue metadata.
 
 ``` yaml
-bernard_bernard:
+bernard:
     driver: file
     options:
         directory: %kernel.cache_dir%/bernard
@@ -138,7 +110,7 @@ PhpRedis depends on a service called `snc_redis.bernard` with a configured `Redi
 different name use the `phpredis_service` option:
 
 ``` yaml
-bernard_bernard:
+bernard:
     driver: phpredis
     options:
         phpredis_service: my_redis_service
@@ -159,8 +131,31 @@ services:
             - { token: %ironmq_token%, project_id: %ironmq_project_id% }
         public: false
 
-bernard_bernard:
+bernard:
     driver: ironmq
     options:
         ironmq_service: ironmq_connection
+```
+
+### Amazon SQS
+
+To use Amazon SQS, configure your driver like this:
+
+``` yaml
+services:
+    my_sqs_client:
+        class: Aws\Sqs\SqsClient
+        factory: Aws\Sqs\SqsClient::factory
+        arguments:
+            region: "your aws region" # e.g. "eu-west-1"
+            key: "your aws user's key"
+            secret: "your aws user's secret"
+
+bernard:
+    driver: sqs
+    options:
+        sqs_service: my_sqs_client
+        sqs_queue_map: # optional for aliasing queue urls (default alias is the url section after the last "/"), e.g.:
+            send_newsletter: https://sqs.eu-west-1.amazonaws.com/...
+        prefetch: 1 # optional, but beware the default is >1 and you may run into invisibility timeout problems with that
 ```

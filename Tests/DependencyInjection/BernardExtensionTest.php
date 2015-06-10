@@ -102,4 +102,28 @@ class BernardExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Alias', $alias);
         $this->assertEquals('bernard.driver.doctrine', (string) $alias);
     }
+
+    public function testSqsDriverCanBeBuildFromConfiguration()
+    {
+        $configuredClientService = 'sqs-client-service';
+        $configuredQueueMap = ['name1' => 'url1', 'name2' => 'url2'];
+        $configuredPrefetchValue = 1;
+
+        $config = [
+            'driver' => 'sqs',
+            'options' => [
+                'sqs_service' => $configuredClientService,
+                'sqs_queue_map' => $configuredQueueMap,
+                'prefetch' => $configuredPrefetchValue,
+            ],
+        ];
+
+        $this->extension->load([$config], $this->container);
+        $driverDefinition = $this->container->getDefinition('bernard.driver.sqs');
+
+        $this->assertCount(3, $driverDefinition->getArguments());
+        $this->assertEquals($configuredClientService, $driverDefinition->getArgument(0));
+        $this->assertEquals($configuredQueueMap, $driverDefinition->getArgument(1));
+        $this->assertEquals($configuredPrefetchValue, $driverDefinition->getArgument(2));
+    }
 }
