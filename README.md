@@ -36,7 +36,6 @@ public function registerBundles()
 # .. previous content of app/config/config.yml
 bernard:
     driver: file # you can choose predis, phpredis, file, doctrine, sqs etc.
-    serializer: simple # this is the default and it is optional. Other values are symfony or jms
 ```
 
 Great! You are now ready to use this diddy. Go and read the rest of the documentation on Bernard at [bernardphp.com](http://bernardphp.com/).
@@ -65,33 +64,6 @@ my_receiver:
 ```
 
 As the example shows it is possible to register the same receiver for many different message types.
-
-### Configuring Middlewares
-
-By default the three core middlewares are registered for the consumer and only needs to be turned on. This example shows
-enabling all of them. But remember theese are only enabled for the consumer.
-
-``` yaml
-bernard:
-    middlewares:
-        error_log: true
-        logger: true # only for versions of symfony that implements PSR-3
-        failures: true
-```
-
-This is all good, but what if you can code your own? Luckily this is taken care of with a tag for the container through
-a compiler pass. When you define your service just tag your middleware factory service with `bernard.middleware` and give
-it a `type` attribute with either `consumer` or `producer`.
-
-``` yaml
-my_middleware_factory:
-    class: Acme\AwesomeMiddlewareFactory
-    tags:
-         - { name: bernard.middleware, type: consumer }
-         - { name: bernard.middleware, type: producer }
-```
-
-As the example shows a middleware factory can be registered for both the consumer and producer.
 
 Configuration Options
 ---------------------
