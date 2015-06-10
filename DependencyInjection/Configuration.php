@@ -17,7 +17,8 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->enumNode('driver')
                     ->isRequired()
-                    ->values(['doctrine', 'file', 'phpredis', 'predis', 'ironmq'])
+                    ->cannotBeEmpty()
+                    ->values(['doctrine', 'file', 'phpredis', 'predis', 'ironmq', 'sqs'])
                 ->end()
 
                 ->arrayNode('options')
@@ -28,6 +29,12 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('phpredis_service')->defaultValue('snc_redis.bernard')->end()
                         ->scalarNode('predis_service')->defaultValue('snc_redis.bernard')->end()
                         ->scalarNode('ironmq_service')->defaultNull()->end()
+                        ->scalarNode('sqs_service')->defaultNull()->end()
+                        ->arrayNode('sqs_queue_map')
+                            ->useAttributeAsKey('name')
+                            ->prototype('scalar')->end()
+                        ->end()
+                        ->scalarNode('prefetch')->defaultNull()->end()
                     ->end()
                 ->end()
 
@@ -65,6 +72,7 @@ class Configuration implements ConfigurationInterface
             ->validateDriver($root, 'phpredis', 'phpredis_service')
             ->validateDriver($root, 'predis', 'predis_service')
             ->validateDriver($root, 'ironmq', 'ironmq_service')
+            ->validateDriver($root, 'sqs', 'sqs_service')
         ;
 
         return $tree;

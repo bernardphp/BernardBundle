@@ -24,11 +24,14 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         ], $config['listeners']);
 
         $this->assertEquals([
+            'prefetch'         => null,
             'connection'       => 'default',
             'directory'        => null,
             'phpredis_service' => 'snc_redis.bernard',
             'predis_service'   => 'snc_redis.bernard',
             'ironmq_service'   => null,
+            'sqs_service'      => null,
+            'sqs_queue_map'    => [],
         ], $config['options']);
     }
 
@@ -65,6 +68,15 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testIronMqDriverRequiresServiceOptionToBeSet()
     {
         $this->processConfig(['driver' => 'ironmq']);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "sqs_service" option must be defined when using the "sqs" driver.
+     */
+    public function testSqsDriverRequiresServiceOptionToBeSet()
+    {
+        $this->processConfig(['driver' => 'sqs']);
     }
 
     /**
