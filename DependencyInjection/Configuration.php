@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
                 ->enumNode('driver')
                     ->isRequired()
                     ->cannotBeEmpty()
-                    ->values(['doctrine', 'file', 'phpredis', 'predis', 'ironmq', 'sqs'])
+                    ->values(['doctrine', 'file', 'phpamqp', 'phpredis', 'predis', 'ironmq', 'sqs'])
                 ->end()
 
                 ->arrayNode('options')
@@ -26,6 +26,12 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('connection')->defaultValue('default')->end()
                         ->scalarNode('directory')->defaultNull()->end()
+                        ->scalarNode('phpamqp_service')->defaultValue('old_sound_rabbit_mq.connection.default')->end()
+                        ->scalarNode('phpamqp_exchange')->defaultNull()->end()
+                        ->arrayNode('phpamqp_default_message_parameters')
+                            ->useAttributeAsKey('name')
+                            ->prototype('scalar')->end()
+                        ->end()
                         ->scalarNode('phpredis_service')->defaultValue('snc_redis.bernard')->end()
                         ->scalarNode('predis_service')->defaultValue('snc_redis.bernard')->end()
                         ->scalarNode('ironmq_service')->defaultNull()->end()
@@ -69,6 +75,8 @@ class Configuration implements ConfigurationInterface
 
         $this
             ->validateDriver($root, 'file', 'directory')
+            ->validateDriver($root, 'phpamqp', 'connection')
+            ->validateDriver($root, 'phpamqp', 'phpamqp_exchange')
             ->validateDriver($root, 'phpredis', 'phpredis_service')
             ->validateDriver($root, 'predis', 'predis_service')
             ->validateDriver($root, 'ironmq', 'ironmq_service')

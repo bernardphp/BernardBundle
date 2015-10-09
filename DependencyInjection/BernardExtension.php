@@ -26,6 +26,10 @@ class BernardExtension extends ConfigurableExtension
                 $this->registerFlatFileConfiguration($config['options'], $container);
                 break;
 
+            case 'phpamqp':
+                $this->registerPhpAmqpConfiguration($config['options'], $container);
+                break;
+
             case 'phpredis':
                 $this->registerPhpRedisConfiguration($config['options'], $container);
                 break;
@@ -62,6 +66,13 @@ class BernardExtension extends ConfigurableExtension
     private function registerFlatFileConfiguration(array $config, ContainerBuilder $container)
     {
         $container->getDefinition('bernard.driver.file')->replaceArgument(0, $config['directory']);
+    }
+
+    private function registerPhpAmqpConfiguration(array $config, ContainerBuilder $container)
+    {
+        $container->getDefinition('bernard.driver.phpamqp')->replaceArgument(0, new Reference($config['phpamqp_service']))
+                                                           ->replaceArgument(1, $config['phpamqp_exchange'])
+                                                           ->replaceArgument(2, $config['phpamqp_default_message_parameters']);
     }
 
     private function registerPhpRedisConfiguration(array $config, ContainerBuilder $container)

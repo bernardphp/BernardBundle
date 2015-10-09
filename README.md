@@ -104,6 +104,29 @@ bernard:
 The above example will dump your messages in the cache folder. In most cases you will want to change this to something
 because the cache folder is deleted every time the cache is cleared (obviously).
 
+### PhpAmqp / RabbitMQ
+
+PhpAmqp depends on a service called `old_sound_rabbit_mq.connection.default` with a configured `AMQPStreamConnection` instance. 
+If you want to use a different name use the `phpamqp_service` option:
+
+``` yaml
+bernard:
+    driver: phpamqp
+    options:
+        phpamqp_service: my_phpamqp_service
+```
+
+You need to define the `phpamqp_exchange`. Optional, you can define `phpamqp_default_message_parameters`:
+``` yaml
+bernard:
+    driver: phpamqp
+    options:
+        phpamqp_exchange: my_phpamqp_service
+        phpamqp_default_message_parameters: 
+            content_type: application/json
+            delivery_mode: 2
+```
+
 ### PhpRedis
 
 PhpRedis depends on a service called `snc_redis.bernard` with a configured `Redis` instance. If you want to use a
