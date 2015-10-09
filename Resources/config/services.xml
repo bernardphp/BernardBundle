@@ -79,6 +79,12 @@
             <argument /><!-- Base directory -->
         </service>
 
+        <service id="bernard.driver.phpamqp" class="Bernard\Driver\PhpAmqpDriver" public="false">
+            <argument /><!-- Connection -->
+            <argument /><!-- exchange -->
+            <argument /><!-- defaultMessageParams -->
+        </service>
+
         <service id="bernard.driver.phpredis" class="Bernard\Driver\PhpRedisDriver" public="false">
             <argument /><!-- Redis -->
         </service>
