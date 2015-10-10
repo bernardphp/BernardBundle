@@ -100,11 +100,9 @@ class BernardExtension extends ConfigurableExtension
     private function registerListeners(array $config, ContainerBuilder $container)
     {
         foreach ($config as $id => $params) {
-            if (empty($params)) {
-                continue;
-            }
+            if (empty($params) || (is_array($params) && !$params['enabled'])) {
+                $container->removeDefinition('bernard.listener.'.$id);
 
-            if (is_array($params) && !$params['enabled']) {
                 continue;
             }
 

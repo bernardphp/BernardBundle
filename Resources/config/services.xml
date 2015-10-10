@@ -46,16 +46,16 @@
 
         <!-- Listeners -->
 
-        <service id="bernard.listener.failure" class="Bernard\EventListener\FailureSubscriber" public="false">
+        <service id="bernard.listener.failure" class="Bernard\EventListener\FailureSubscriber">
             <argument type="service" id="bernard.queue_factory" />
             <argument /><!-- Queue name -->
         </service>
 
-        <service id="bernard.listener.logger" class="Bernard\EventListener\LoggerSubscriber" public="false">
+        <service id="bernard.listener.logger" class="Bernard\EventListener\LoggerSubscriber">
             <argument /><!-- Logger -->
         </service>
 
-        <service id="bernard.listener.error_log" class="Bernard\EventListener\ErrorLogSubscriber" public="false" />
+        <service id="bernard.listener.error_log" class="Bernard\EventListener\ErrorLogSubscriber" />
 
         <service id="bernard.listener.doctrine_schema" class="Bernard\BernardBundle\EventListener\SchemaListener" public="false" />
 

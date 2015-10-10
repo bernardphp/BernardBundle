@@ -35,6 +35,16 @@ class BernardExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Bernard\Command\ProduceCommand', $this->container->get('bernard.command.produce'));
     }
 
+    public function testListenersAreNotRegisteredByDefault()
+    {
+        $config = ['driver' => 'doctrine'];
+        $this->extension->load([$config], $this->container);
+
+        foreach (['error_log', 'logger', 'failure'] as $listener) {
+            $this->assertFalse($this->container->hasDefinition('bernard.listener.'.$listener));
+        }
+    }
+
     public function testListenersHaveSubscriberTag()
     {
         $config = [
