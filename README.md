@@ -106,7 +106,7 @@ because the cache folder is deleted every time the cache is cleared (obviously).
 
 ### PhpAmqp / RabbitMQ
 
-PhpAmqp depends on a service called `old_sound_rabbit_mq.connection.default` with a configured `AMQPStreamConnection` instance. 
+PhpAmqp depends on a service called `old_sound_rabbit_mq.connection.default` with a configured `AMQPStreamConnection` instance.
 If you want to use a different name use the `phpamqp_service` option:
 
 ``` yaml
@@ -122,7 +122,7 @@ bernard:
     driver: phpamqp
     options:
         phpamqp_exchange: my_phpamqp_service
-        phpamqp_default_message_parameters: 
+        phpamqp_default_message_parameters:
             content_type: application/json
             delivery_mode: 2
 ```
@@ -181,4 +181,21 @@ bernard:
         sqs_queue_map: # optional for aliasing queue urls (default alias is the url section after the last "/"), e.g.:
             send_newsletter: https://sqs.eu-west-1.amazonaws.com/...
         prefetch: 1 # optional, but beware the default is >1 and you may run into invisibility timeout problems with that
+```
+
+### Pheanstalk
+
+To use Pheanstalk (pda/pheanstalk), configure your driver like this:
+
+``` yaml
+services:
+    my.pheanstalk.connection:
+        class: Pheanstalk\Pheanstalk
+        arguments:
+            - %some.parameter.containing.pheanstalk.host%
+
+bernard:
+    driver: pheanstalk
+    options:
+        pheanstalk_service: my.pheanstalk.connection
 ```

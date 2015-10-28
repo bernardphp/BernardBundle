@@ -45,6 +45,10 @@ class BernardExtension extends ConfigurableExtension
             case 'sqs':
                 $this->registerSqsConfiguration($config['options'], $container);
                 break;
+
+            case 'pheanstalk':
+                $this->registerPheanstalkConfiguration($config['options'], $container);
+                break;
         }
 
         $this->registerListeners($config['listeners'], $container);
@@ -95,6 +99,11 @@ class BernardExtension extends ConfigurableExtension
         $container->getDefinition('bernard.driver.sqs')->replaceArgument(0, new Reference($config['sqs_service']))
                                                        ->replaceArgument(1, $config['sqs_queue_map'])
                                                        ->replaceArgument(2, $config['prefetch']);
+    }
+
+    private function registerPheanstalkConfiguration(array $config, ContainerBuilder $container)
+    {
+        $container->getDefinition('bernard.driver.pheanstalk')->replaceArgument(0, new Reference($config['pheanstalk_service']));
     }
 
     private function registerListeners(array $config, ContainerBuilder $container)

@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
                 ->enumNode('driver')
                     ->isRequired()
                     ->cannotBeEmpty()
-                    ->values(['doctrine', 'file', 'phpamqp', 'phpredis', 'predis', 'ironmq', 'sqs'])
+                    ->values(['doctrine', 'file', 'phpamqp', 'phpredis', 'predis', 'ironmq', 'sqs', 'pheanstalk'])
                 ->end()
 
                 ->arrayNode('options')
@@ -41,6 +41,7 @@ class Configuration implements ConfigurationInterface
                             ->prototype('scalar')->end()
                         ->end()
                         ->scalarNode('prefetch')->defaultNull()->end()
+                        ->scalarNode('pheanstalk_service')->defaultNull()->end()
                     ->end()
                 ->end()
 
@@ -81,6 +82,7 @@ class Configuration implements ConfigurationInterface
             ->validateDriver($root, 'predis', 'predis_service')
             ->validateDriver($root, 'ironmq', 'ironmq_service')
             ->validateDriver($root, 'sqs', 'sqs_service')
+            ->validateDriver($root, 'pheanstalk', 'pheanstalk_service')
         ;
 
         return $tree;

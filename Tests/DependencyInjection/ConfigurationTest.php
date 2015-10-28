@@ -35,6 +35,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'ironmq_service'                     => null,
             'sqs_service'                        => null,
             'sqs_queue_map'                      => [],
+            'pheanstalk_service'                 => null,
         ], $config['options']);
     }
 
@@ -89,6 +90,15 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testSqsDriverRequiresServiceOptionToBeSet()
     {
         $this->processConfig(['driver' => 'sqs']);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "pheanstalk_service" option must be defined when using the "pheanstalk" driver.
+     */
+    public function testPheanstalkDriverRequiresServiceOptionToBeSet()
+    {
+        $this->processConfig(['driver' => 'pheanstalk']);
     }
 
     /**
