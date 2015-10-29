@@ -38,7 +38,7 @@ bernard:
     driver: file # you can choose predis, phpredis, file, doctrine, sqs etc.
 ```
 
-Great! You are now ready to use this diddy. Go and read the rest of the documentation on Bernard at [bernardphp.com](http://bernardphp.com/).
+Great! You are now ready to use this diddy. Go and read the rest of the documentation on Bernard at [bernard.readthedocs.org](http://bernard.readthedocs.org).
 
 ### Running the Consumer
 

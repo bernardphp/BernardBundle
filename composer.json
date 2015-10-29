@@ -2,7 +2,7 @@
     "name"        : "bernard/bernard-bundle",
     "description" : "Integrates Bernard into a Symfony2 application.",
     "type"        : "symfony-bundle",
-    "homepage"    : "http://bernardphp.com",
+    "homepage"    : "http://bernard.readthedocs.org/",
     "license"     : "MIT",
 
     "autoload" : {
