@@ -103,5 +103,9 @@
             <argument /><!-- IronMQ connection -->
         </service>
 
+        <service id="bernard.driver.pheanstalk" class="Bernard\Driver\PheanstalkDriver" public="false">
+            <argument /><!-- Pheanstalk connection -->
+        </service>
+
     </services>
 </container>
