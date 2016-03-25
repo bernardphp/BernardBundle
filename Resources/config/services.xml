@@ -41,6 +41,11 @@
             <argument type="service" id="bernard.producer" />
         </service>
 
+        <!-- Normalizers -->
+        <service id="bernard.symfony.normalizer" class="Bernard\Symfony\EnvelopeNormalizer" public="false">
+            <tag name="serializer.normalizer" />
+        </service>
+
         <!-- Serializers -->
         <service id="bernard.serializer.simple" class="Bernard\Serializer\SimpleSerializer" public="false" />
 
