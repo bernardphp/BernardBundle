@@ -36,6 +36,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'sqs_service'                        => null,
             'sqs_queue_map'                      => [],
             'pheanstalk_service'                 => null,
+            'custom_service'                     => null,
         ], $config['options']);
     }
 
@@ -99,6 +100,15 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testPheanstalkDriverRequiresServiceOptionToBeSet()
     {
         $this->processConfig(['driver' => 'pheanstalk']);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "custom_service" option must be defined when using the "custom" driver.
+     */
+    public function testCustomDriverRequiresServiceOptionToBeSet()
+    {
+        $this->processConfig(['driver' => 'custom']);
     }
 
     /**

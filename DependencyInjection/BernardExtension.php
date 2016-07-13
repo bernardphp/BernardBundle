@@ -15,8 +15,6 @@ class BernardExtension extends ConfigurableExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        $container->setAlias('bernard.driver', 'bernard.driver.'.$config['driver']);
-
         switch ($config['driver']) {
             case 'doctrine':
                 $this->registerDoctrineConfiguration($config['options'], $container);
@@ -49,6 +47,12 @@ class BernardExtension extends ConfigurableExtension
             case 'pheanstalk':
                 $this->registerPheanstalkConfiguration($config['options'], $container);
                 break;
+        }
+
+        if ($config['driver'] === 'custom') {
+            $container->setAlias('bernard.driver', $config['options']['custom_service']);
+        } else {
+            $container->setAlias('bernard.driver', 'bernard.driver.'.$config['driver']);
         }
 
         $this->registerListeners($config['listeners'], $container);
