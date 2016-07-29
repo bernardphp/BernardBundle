@@ -3,6 +3,7 @@
 namespace Bernard\BernardBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -28,12 +29,23 @@ class DebugCommand extends ContainerAwareCommand
             $rows[] = [$key, $val];
         }
 
-        /** @var \Symfony\Component\Console\Helper\TableHelper $helper */
-        $helper = $this->getHelper('table');
-        $helper
-            ->setHeaders(['Message', 'Service'])
-            ->addRows($rows)
-            ->render($output)
-        ;
+        $headers = ['Message', 'Service'];
+
+        if (class_exists('Symfony\Component\Console\Helper\Table')) {
+            $table = new Table($output);
+            $table
+                ->setHeaders($headers)
+                ->addRows($rows)
+                ->render()
+            ;
+        } else {
+            /** @var \Symfony\Component\Console\Helper\TableHelper $helper */
+            $helper = $this->getHelper('table');
+            $helper
+                ->setHeaders($headers)
+                ->addRows($rows)
+                ->render($output)
+            ;
+        }
     }
 }
