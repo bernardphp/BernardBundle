@@ -47,7 +47,7 @@
         <!-- Listeners -->
 
         <service id="bernard.listener.failure" class="Bernard\EventListener\FailureSubscriber">
-            <argument type="service" id="bernard.queue_factory" />
+            <argument type="service" id="bernard.producer" />
             <argument /><!-- Queue name -->
         </service>
 
