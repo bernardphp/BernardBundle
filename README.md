@@ -106,7 +106,7 @@ because the cache folder is deleted every time the cache is cleared (obviously).
 
 ### PhpAmqp / RabbitMQ
 
-PhpAmqp depends on a service called `old_sound_rabbit_mq.connection.default` with a configured `AMQPStreamConnection` instance.
+PhpAmqp depends on a service called `old_sound_rabbit_mq.connection.default` with a configured connection instance that extends `\PhpAmqpLib\Connection\AbstractConnection` class.
 If you want to use a different name use the `phpamqp_service` option:
 
 ``` yaml
