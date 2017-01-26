@@ -9,7 +9,7 @@
     },
 
     "require" : {
-        "bernard/bernard" : ">=0.11,<0.13",
+        "artis-kokorevics-mintos/bernard" : ">=0.11,<0.13",
         "symfony/framework-bundle" : "~2.1"
     },
 
