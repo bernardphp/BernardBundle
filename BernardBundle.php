@@ -4,7 +4,6 @@ namespace Bernard\BernardBundle;
 
 use Bernard\BernardBundle\DependencyInjection\Compiler\NormalizerPass;
 use Bernard\BernardBundle\DependencyInjection\Compiler\ReceiverPass;
-use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -16,13 +15,5 @@ class BernardBundle extends Bundle
             ->addCompilerPass(new ReceiverPass())
             ->addCompilerPass(new NormalizerPass())
         ;
-    }
-
-    public function registerCommands(Application $application)
-    {
-        parent::registerCommands($application);
-
-        $application->add($this->container->get('bernard.command.consume'));
-        $application->add($this->container->get('bernard.command.produce'));
     }
 }
