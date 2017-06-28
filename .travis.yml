@@ -1,28 +1,33 @@
+sudo: false
+dist: trusty
+
 language: php
 
 php:
-    - 5.5
     - 5.6
     - 7.0
+    - 7.1
     - hhvm
 
-env:
-    - SYMFONY_VERSION=2.3.*
-    - SYMFONY_VERSION=2.4.*
-    - SYMFONY_VERSION=2.5.*
-    - SYMFONY_VERSION=2.6.*
-    - SYMFONY_VERSION=2.7.*
-    - SYMFONY_VERSION=2.8.*
-    - SYMFONY_VERSION=3.0.*
+matrix:
+    fast_finish: true
+    include:
+        - php: 5.6
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
+        - php: 7.1
+          env: DEPENDENCIES=dev
+        - php: 7.0
+          env: SYMFONY_VERSION=2.8.* # Test against LTS versions
+
+before_install:
+    - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+    - if [ "$DEPENDENCIES" = "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
 
 before_install:
     - composer self-update
 
 install:
-    - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
-    - composer require symfony/console:${SYMFONY_VERSION} --no-update
-    - composer require symfony/finder:${SYMFONY_VERSION} --no-update
-    - composer install --no-progress --no-plugins
+    - travis_retry composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
 
 script:
     - bin/phpunit
