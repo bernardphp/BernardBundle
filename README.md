@@ -58,6 +58,7 @@ service definitions.
 ``` yaml
 my_receiver:
     class: Acme\Receiver
+    # public: true # Make sure the service is public
     tags:
          - { name: bernard.receiver, message: SendNewsletter }
          - { name: bernard.receiver, message: ImportUsers }

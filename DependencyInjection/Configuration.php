@@ -25,7 +25,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('connection')->defaultValue('default')->end()
-                        ->scalarNode('directory')->defaultNull()->end()
+                        ->scalarNode('directory')->defaultValue('%kernel.cache_dir%/bernard')->end()
                         ->scalarNode('phpamqp_service')->defaultValue('old_sound_rabbit_mq.connection.default')->end()
                         ->scalarNode('phpamqp_exchange')->defaultNull()->end()
                         ->arrayNode('phpamqp_default_message_parameters')
