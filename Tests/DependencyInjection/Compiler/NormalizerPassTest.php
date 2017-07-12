@@ -5,7 +5,7 @@ namespace Bernard\BernardBundle\Tests\DependencyInjection\Compiler;
 use Bernard\BernardBundle\DependencyInjection\Compiler\NormalizerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class NormalizerPassTest extends \PHPUnit_Framework_TestCase
+class NormalizerPassTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ContainerBuilder */
     private $container;

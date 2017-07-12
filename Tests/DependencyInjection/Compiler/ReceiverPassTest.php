@@ -6,7 +6,7 @@ use Bernard\BernardBundle\DependencyInjection\Compiler\ReceiverPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class ReceiverPassTest extends \PHPUnit_Framework_TestCase
+class ReceiverPassTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ContainerBuilder */
     private $container;
@@ -45,10 +45,11 @@ class ReceiverPassTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $arguments[1]);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
     public function testExceptionWhenNameAttributeIsMissing()
     {
-        $this->setExpectedException('RuntimeException');
-
         $this->container->register('test_receiver', 'stdClass')->addTag('bernard.receiver', []);
 
         $pass = new ReceiverPass();

@@ -5,7 +5,7 @@ namespace Bernard\BernardBundle\Tests\DependencyInjection;
 use Bernard\BernardBundle\DependencyInjection\BernardExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class BernardExtensionTest extends \PHPUnit_Framework_TestCase
+class BernardExtensionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var BernardExtension */
     private $extension;
@@ -25,8 +25,8 @@ class BernardExtensionTest extends \PHPUnit_Framework_TestCase
         $this->extension->load([$config], $this->container);
 
         // Make sure we don't have a dependencies on a real driver.
-        $this->container->set('bernard.driver', $this->getMock('Bernard\Driver'));
-        $this->container->set('event_dispatcher', $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'));
+        $this->container->set('bernard.driver', $this->createMock('Bernard\Driver'));
+        $this->container->set('event_dispatcher', $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'));
 
         // Real services.
         $this->assertInstanceOf('Bernard\Producer', $this->container->get('bernard.producer'));
