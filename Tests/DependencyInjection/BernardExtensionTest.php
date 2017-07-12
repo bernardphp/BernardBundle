@@ -17,6 +17,8 @@ class BernardExtensionTest extends \PHPUnit\Framework\TestCase
     {
         $this->extension = new BernardExtension();
         $this->container = new ContainerBuilder();
+
+        $this->container->setParameter('kernel.debug', true);
     }
 
     public function testServicesExists()

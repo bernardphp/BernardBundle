@@ -1,0 +1,74 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {% if collector.messageCount > 0 %}
+        {% set icon %}
+            {{ include('@Bernard/Icon/bernard.svg') }}
+            <span class="sf-toolbar-value">{{ collector.messageCount }}</span>
+        {% endset %}
+
+        {% set text %}
+            <div class="sf-toolbar-info-piece">
+                <b>Total messages:</b>
+                <span class="sf-toolbar-status">{{ collector.messageCount }}</span>
+            </div>
+            <div class="sf-toolbar-info-piece">
+                <b>Total distinct queues:</b>
+                <span class="sf-toolbar-status">{{ collector.distinctQueueCount }}</span>
+            </div>
+        {% endset %}
+
+        {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: profiler_url, name: 'bernard' }) }}
+    {% endif %}
+{% endblock %}
+
+{% block menu %}
+    <span class="label {{ collector.messageCount > 0 ?: 'disabled' }}">
+        <span class="icon">{{ include('@Bernard/Icon/bernard.svg') }}</span>
+        <strong>Bernard</strong>
+    </span>
+{% endblock %}
+
+{% block panel %}
+    <h2>Bernard</h2>
+
+    {% if collector.messageCount > 0 %}
+        <div class="sf-dump sf-reset">
+            {% for queue,messages in collector.allMessages %}
+                <h4>Queue: {{ queue }}</h4>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Message</th>
+                        <th>Produced at</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for message in messages %}
+                        <tr>
+                            <td class="font-normal text-small text-muted nowrap">{{ loop.index }}</td>
+                            <td class="font-normal">
+                                {% set context_id = 'context-' ~ queue ~ '-' ~ loop.index %}
+
+                                {{ message.class }}
+
+                                <a class="text-small sf-toggle" data-toggle-selector="#{{ context_id }}" data-toggle-alt-content="Hide message">Show message</a>
+
+                                <div class="sf-dump-compact hidden" id="{{ context_id }}">
+                                    {{ profiler_dump(message.message, maxDepth=2) }}
+                                </div>
+                            </td>
+                            <td class="nowrap">{{ message.timestamp|date('d/m/Y H:i:s') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty">
+            <p>No messages were produced.</p>
+        </div>
+    {% endif %}
+{% endblock %}
