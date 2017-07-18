@@ -5,7 +5,7 @@ namespace Bernard\BernardBundle\Tests\DependencyInjection;
 use Bernard\BernardBundle\DependencyInjection\Configuration;
 use Symfony\Component\Config\Definition\Processor;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     public function testDefaults()
     {
