@@ -69,6 +69,11 @@
             <tag name="bernard.normalizer" />
         </service>
 
+        <service id="bernard.normalizer.default_message" class="Bernard\BernardBundle\Normalizer\DefaultMessageNormalizer">
+            <tag name="bernard.normalizer" />
+        </service>
+
+
         <!-- Drivers -->
 
         <service id="bernard.driver.doctrine" class="Bernard\Driver\DoctrineDriver" public="false">
