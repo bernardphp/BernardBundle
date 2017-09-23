@@ -87,7 +87,7 @@
         <!-- Middlewares -->
         <service id="bernard.middleware.error_log" class="Bernard\Middleware\ErrorLogFactory" public="false" />
 
-        <service id="bernard.middleware.logger" class="Bernard\Middleware\Logger" public="false">
+        <service id="bernard.middleware.logger" class="Bernard\Middleware\LoggerFactory" public="false">
             <argument type="service" id="logger" />
         </service>
 
