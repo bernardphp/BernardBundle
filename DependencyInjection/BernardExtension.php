@@ -2,8 +2,10 @@
 
 namespace Bernard\BernardBundle\DependencyInjection;
 
+use Bernard\BernardBundle\Collector\ProducerCollector;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
@@ -56,6 +58,10 @@ class BernardExtension extends ConfigurableExtension
         }
 
         $this->registerListeners($config['listeners'], $container);
+
+        if ($container->getParameter('kernel.debug')) {
+            $loader->load('collector.xml');
+        }
     }
 
     private function registerDoctrineConfiguration($config, ContainerBuilder $container)
