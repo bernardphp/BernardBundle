@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="bernard.command.consume" class="Bernard\Command\ConsumeCommand">
+            <argument type="service" id="bernard.consumer" />
+            <argument type="service" id="bernard.queue_factory" />
+            <tag name="console.command"/>
+        </service>
+
+        <service id="bernard.command.produce" class="Bernard\Command\ProduceCommand">
+            <argument type="service" id="bernard.producer" />
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Bernard\BernardBundle\Command\DebugCommand" class="Bernard\BernardBundle\Command\DebugCommand">
+            <tag name="console.command"/>
+        </service>
+    </services>
+</container>
