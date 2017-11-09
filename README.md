@@ -27,7 +27,7 @@ Next up is adding the bundle to your kernel and configuring it in `config.yml`.
 public function registerBundles()
 {
     // .. all the other bundles you have registered.
-    $bundles[] = new Bernard\BernardBundle\BernardBundle();
+    $bundles[] = new Bernard\BernardBundle\BernardBernardBundle();
     // .. the rest of the method
 }
 ```
