@@ -12,12 +12,12 @@
     "require" : {
         "php": "^5.6|^7.0",
         "bernard/bernard": "1.0.*@dev",
-        "symfony/framework-bundle": "^2.8|^3.0"
+        "symfony/framework-bundle": "^2.8|^3.0|^4.0"
     },
 
     "require-dev" : {
-        "symfony/console": "^2.8|^3.0",
-        "symfony/finder": "^2.8|^3.0",
+        "symfony/console": "^2.8|^3.0|^4.0",
+        "symfony/finder": "^2.8|^3.0|^4.0",
         "phpunit/phpunit": "^5.5|^6.0"
     },
 
