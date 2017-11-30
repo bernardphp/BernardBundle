@@ -21,8 +21,5 @@ class BernardBundle extends Bundle
     public function registerCommands(Application $application)
     {
         parent::registerCommands($application);
-
-        $application->add($this->container->get('bernard.command.consume'));
-        $application->add($this->container->get('bernard.command.produce'));
     }
 }
