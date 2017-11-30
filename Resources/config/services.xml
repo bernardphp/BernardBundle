@@ -4,6 +4,9 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="Bernard\Producer" alias="bernard.producer" public="false" />
+        <service id="Bernard\Consumer" alias="bernard.consumer" public="false" />
+        <service id="Bernard\QueueFactory\PersistentFactory" alias="bernard.queue_factory" public="false" />
 
         <service id="bernard.router" class="Bernard\Router\ContainerAwareRouter">
             <argument type="service" id="service_container" />
