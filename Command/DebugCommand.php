@@ -29,23 +29,11 @@ class DebugCommand extends ContainerAwareCommand
             $rows[] = [$key, $val];
         }
 
-        $headers = ['Message', 'Service'];
-
-        if (class_exists('Symfony\Component\Console\Helper\Table')) {
-            $table = new Table($output);
-            $table
-                ->setHeaders($headers)
-                ->addRows($rows)
-                ->render()
-            ;
-        } else {
-            /** @var \Symfony\Component\Console\Helper\TableHelper $helper */
-            $helper = $this->getHelper('table');
-            $helper
-                ->setHeaders($headers)
-                ->addRows($rows)
-                ->render($output)
-            ;
-        }
+        $table = new Table($output);
+        $table
+            ->setHeaders(['Message', 'Service'])
+            ->addRows($rows)
+            ->render()
+        ;
     }
 }
