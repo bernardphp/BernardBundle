@@ -12,7 +12,8 @@
             <tag name="console.command" command="bernard:produce" />
         </service>
 
-        <service id="Bernard\BernardBundle\Command\DebugCommand">
+        <service class="Bernard\BernardBundle\Command\DebugCommand" id="Bernard\BernardBundle\Command\DebugCommand">
+            <argument type="service" id="bernard.router" />
             <tag name="console.command" command="bernard:debug" />
         </service>
     </services>
