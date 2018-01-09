@@ -82,6 +82,9 @@ class ProducerCollector extends DataCollector implements EventSubscriberInterfac
      */
     public function reset()
     {
-        $this->data = [];
+        $this->data = [
+            'messageCount' => 0,
+            'messages' => [],
+        ];
     }
 }
