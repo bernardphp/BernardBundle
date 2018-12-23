@@ -1,0 +1,5 @@
+preset: symfony
+risky: false
+
+disabled:
+    - yoda_style

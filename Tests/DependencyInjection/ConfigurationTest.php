@@ -24,19 +24,19 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         ], $config['listeners']);
 
         $this->assertEquals([
-            'prefetch'                           => null,
-            'connection'                         => 'default',
-            'directory'                          => '%kernel.cache_dir%/bernard',
-            'phpamqp_service'                    => 'old_sound_rabbit_mq.connection.default',
-            'phpamqp_exchange'                   => null,
+            'prefetch' => null,
+            'connection' => 'default',
+            'directory' => '%kernel.cache_dir%/bernard',
+            'phpamqp_service' => 'old_sound_rabbit_mq.connection.default',
+            'phpamqp_exchange' => null,
             'phpamqp_default_message_parameters' => [],
-            'phpredis_service'                   => 'snc_redis.bernard',
-            'predis_service'                     => 'snc_redis.bernard',
-            'ironmq_service'                     => null,
-            'sqs_service'                        => null,
-            'sqs_queue_map'                      => [],
-            'pheanstalk_service'                 => null,
-            'custom_service'                     => null,
+            'phpredis_service' => 'snc_redis.bernard',
+            'predis_service' => 'snc_redis.bernard',
+            'ironmq_service' => null,
+            'sqs_service' => null,
+            'sqs_queue_map' => [],
+            'pheanstalk_service' => null,
+            'custom_service' => null,
         ], $config['options']);
     }
 

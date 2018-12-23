@@ -53,8 +53,8 @@ class BernardExtensionTest extends \PHPUnit\Framework\TestCase
             'driver' => 'doctrine',
             'listeners' => [
                 'error_log' => true,
-                'logger'    => true,
-                'failure'   => true,
+                'logger' => true,
+                'failure' => true,
             ],
         ];
         $this->extension->load([$config], $this->container);
@@ -78,9 +78,9 @@ class BernardExtensionTest extends \PHPUnit\Framework\TestCase
         $definition = $this->container->getDefinition('bernard.listener.doctrine_schema');
 
         $expected = [
-            'event'      => 'postGenerateSchema',
+            'event' => 'postGenerateSchema',
             'connection' => 'bernard',
-            'lazy'       => true,
+            'lazy' => true,
         ];
 
         $this->assertTrue($definition->hasTag('doctrine.event_listener'));

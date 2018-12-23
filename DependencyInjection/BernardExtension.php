@@ -2,10 +2,8 @@
 
 namespace Bernard\BernardBundle\DependencyInjection;
 
-use Bernard\BernardBundle\Collector\ProducerCollector;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
@@ -21,34 +19,42 @@ class BernardExtension extends ConfigurableExtension
         switch ($config['driver']) {
             case 'doctrine':
                 $this->registerDoctrineConfiguration($config['options'], $container);
+
                 break;
 
             case 'file':
                 $this->registerFlatFileConfiguration($config['options'], $container);
+
                 break;
 
             case 'phpamqp':
                 $this->registerPhpAmqpConfiguration($config['options'], $container);
+
                 break;
 
             case 'phpredis':
                 $this->registerPhpRedisConfiguration($config['options'], $container);
+
                 break;
 
             case 'predis':
                 $this->registerPredisConfiguration($config['options'], $container);
+
                 break;
 
             case 'ironmq':
                 $this->registerIronMQConfiguration($config['options'], $container);
+
                 break;
 
             case 'sqs':
                 $this->registerSqsConfiguration($config['options'], $container);
+
                 break;
 
             case 'pheanstalk':
                 $this->registerPheanstalkConfiguration($config['options'], $container);
+
                 break;
         }
 
@@ -71,9 +77,9 @@ class BernardExtension extends ConfigurableExtension
         $container
             ->getDefinition('bernard.listener.doctrine_schema')
             ->addTag('doctrine.event_listener', [
-                'lazy'       => true,
-                'event'      => 'postGenerateSchema',
-                'connection' => $config['connection']
+                'lazy' => true,
+                'event' => 'postGenerateSchema',
+                'connection' => $config['connection'],
             ]
         );
     }
