@@ -62,7 +62,9 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(function ($v) { return ['enabled' => true, 'service' => $v]; })
+                                ->then(function ($v) {
+                                    return ['enabled' => true, 'service' => $v];
+                                })
                             ->end()
                         ->end()
                         ->arrayNode('failure')
@@ -72,7 +74,9 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(function ($v) { return ['enabled' => true, 'queue_name' => $v]; })
+                                ->then(function ($v) {
+                                    return ['enabled' => true, 'queue_name' => $v];
+                                })
                             ->end()
                         ->end()
                     ->end()
