@@ -6,7 +6,10 @@
     "license"     : "MIT",
 
     "autoload" : {
-        "psr-4" : { "Bernard\\BernardBundle\\" : "" }
+        "psr-4" : { "Bernard\\BernardBundle\\" : "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
 
     "require" : {
