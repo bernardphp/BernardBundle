@@ -6,24 +6,24 @@
     <services>
         <service id="Bernard\Producer" alias="bernard.producer" public="false" />
         <service id="Bernard\Consumer" alias="bernard.consumer" public="false" />
-        <service id="Bernard\QueueFactory\PersistentFactory" alias="bernard.queue_factory" public="false" />
+        <service id="Bernard\QueueFactory\PersistentFactory" alias="bernard.queue_factory" public="true" />
 
-        <service id="bernard.router" class="Bernard\Router\ContainerAwareRouter">
+        <service id="bernard.router" class="Bernard\Router\ContainerAwareRouter" public="true">
             <argument type="service" id="service_container" />
             <argument type="collection" /><!-- Receivers -->
         </service>
 
-        <service id="bernard.consumer" class="Bernard\Consumer">
+        <service id="bernard.consumer" class="Bernard\Consumer" public="true">
             <argument type="service" id="bernard.router" />
             <argument type="service" id="event_dispatcher" />
         </service>
 
-        <service id="bernard.producer" class="Bernard\Producer">
+        <service id="bernard.producer" class="Bernard\Producer" public="true">
             <argument type="service" id="bernard.queue_factory" />
             <argument type="service" id="event_dispatcher" />
         </service>
 
-        <service id="bernard.queue_factory" class="Bernard\QueueFactory\PersistentFactory" public="false">
+        <service id="bernard.queue_factory" class="Bernard\QueueFactory\PersistentFactory" public="true">
             <argument type="service" id="bernard.driver" />
             <argument type="service" id="bernard.serializer" />
         </service>
@@ -38,30 +38,30 @@
 
         <!-- Listeners -->
 
-        <service id="bernard.listener.failure" class="Bernard\EventListener\FailureSubscriber">
+        <service id="bernard.listener.failure" class="Bernard\EventListener\FailureSubscriber" public="true">
             <argument type="service" id="bernard.producer" />
             <argument /><!-- Queue name -->
         </service>
 
-        <service id="bernard.listener.logger" class="Bernard\EventListener\LoggerSubscriber">
+        <service id="bernard.listener.logger" class="Bernard\EventListener\LoggerSubscriber" public="true">
             <argument /><!-- Logger -->
         </service>
 
-        <service id="bernard.listener.error_log" class="Bernard\EventListener\ErrorLogSubscriber" />
+        <service id="bernard.listener.error_log" class="Bernard\EventListener\ErrorLogSubscriber" public="true"/>
 
         <service id="bernard.listener.doctrine_schema" class="Bernard\BernardBundle\EventListener\SchemaListener" public="false" />
 
         <!-- Normalizers -->
 
-        <service id="bernard.normalizer.envelope" class="Bernard\Normalizer\EnvelopeNormalizer">
+        <service id="bernard.normalizer.envelope" class="Bernard\Normalizer\EnvelopeNormalizer" public="true">
             <tag name="bernard.normalizer" />
         </service>
 
-        <service id="bernard.normalizer.plain_message" class="Bernard\Normalizer\PlainMessageNormalizer">
+        <service id="bernard.normalizer.plain_message" class="Bernard\Normalizer\PlainMessageNormalizer" public="true">
             <tag name="bernard.normalizer" />
         </service>
 
-        <service id="bernard.normalizer.default_message" class="Bernard\BernardBundle\Normalizer\DefaultMessageNormalizer">
+        <service id="bernard.normalizer.default_message" class="Bernard\BernardBundle\Normalizer\DefaultMessageNormalizer" public="true">
             <tag name="bernard.normalizer" />
         </service>
 
