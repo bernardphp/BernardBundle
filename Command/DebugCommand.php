@@ -3,7 +3,7 @@
 namespace Bernard\BernardBundle\Command;
 
 use Bernard\Router;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @final since 2.1
  */
-class DebugCommand extends ContainerAwareCommand
+class DebugCommand extends Command
 {
     /**
      * @var Router

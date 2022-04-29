@@ -26,7 +26,7 @@ class ProducerCollector extends DataCollector implements EventSubscriberInterfac
      * @param Response   $response  A Response instance
      * @param \Exception $exception An Exception instance
      */
-    public function collect(Request $request, Response $response, \Exception $exception = null)
+    public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         // We don't collect anything from the request data
     }
